@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "31z5NOky7XvlpKoS7989o60RYGwY7AjDfzVBAGQ9wFa2V6Ymi9St+rq7JNc69Aw058f8CZnDp/qUJp82k1LPTw==",
+  "dgSpecHash": "Jp3SOF2gihA1wgfVDnax2uOTrIkSY7JDL47MxtdY71cE4mu80Q5gEqG+LBjtzNiz4mTIMhgA/Bu7sJ6mOAVCbA==",
   "success": true,
-  "projectFilePath": "D:\\workspace\\core\\MedicalPlant\\MedicalPlant\\MedicalPlant.csproj",
+  "projectFilePath": "D:\\workspace\\core\\MedicalPlant\\backend\\MedicalPlant\\MedicalPlant.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Aures\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
