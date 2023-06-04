@@ -466,11 +466,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aures\\RiderProjects\\MedicalPlant\\MedicalPlant\\MedicalPlant.csproj",
+      "projectUniqueName": "D:\\workspace\\core\\MedicalPlant\\MedicalPlant\\MedicalPlant.csproj",
       "projectName": "MedicalPlant",
-      "projectPath": "C:\\Users\\Aures\\RiderProjects\\MedicalPlant\\MedicalPlant\\MedicalPlant.csproj",
+      "projectPath": "D:\\workspace\\core\\MedicalPlant\\MedicalPlant\\MedicalPlant.csproj",
       "packagesPath": "C:\\Users\\Aures\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aures\\RiderProjects\\MedicalPlant\\MedicalPlant\\obj\\",
+      "outputPath": "D:\\workspace\\core\\MedicalPlant\\MedicalPlant\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Users\\Aures\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
