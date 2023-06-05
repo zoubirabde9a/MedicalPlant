@@ -1,5 +1,8 @@
 using Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Model;
 
 namespace Controllers;
@@ -41,9 +44,9 @@ public class PlantController : Controller
         var entryList = Context.PlantContraindicationEntryData.Where(entry =>
             entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
 
-        var plantList = Context.PlantData.Where(plant => plant.Id == plantId);
+        var plantList = Context.PlantData.Where(plant => plant.PlantId == plantId);
         var contraindicationList =
-            Context.PlantContraindicationData.Where(contraindication => contraindication.Id == contraindicationId);
+            Context.PlantContraindicationData.Where(contraindication => contraindication.PlantContraindicationId == contraindicationId);
 
         bool alreadyExists = entryList != null && entryList.Count() > 0;
         bool PlantDoesNotExist = plantList == null || plantList.Count() == 0;
@@ -82,14 +85,14 @@ public class PlantController : Controller
     [Route("Get")]
     public async Task<ActionResult<Plant>> Get(int plantId)
     {
-        var newObject = Context.PlantData.Where(plant => plant.Id == plantId);
+        var newObject = Context.PlantData.Where(plant => plant.PlantId == plantId);
         
         var list = newObject.ToList();
         if (list != null && list.Count > 0)
         {
             Plant plant = list[0];
 
-            var entryList = Context.PlantContraindicationEntryData.Where(plantEntry => plantEntry.PlantId == plant.Id);
+            var entryList = Context.PlantContraindicationEntryData.Where(plantEntry => plantEntry.PlantId == plant.PlantId);
             if (entryList != null)
             {
                 plant.PlantContraindicationEntries = entryList.ToList();

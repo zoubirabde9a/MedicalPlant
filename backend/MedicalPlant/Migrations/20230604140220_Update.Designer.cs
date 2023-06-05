@@ -3,6 +3,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalPlant.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230604140220_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,11 +25,11 @@ namespace MedicalPlant.Migrations
 
             modelBuilder.Entity("Model.Plant", b =>
                 {
-                    b.Property<long>("PlantId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PlantId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -40,18 +42,18 @@ namespace MedicalPlant.Migrations
                     b.Property<bool>("Removed")
                         .HasColumnType("bit");
 
-                    b.HasKey("PlantId");
+                    b.HasKey("Id");
 
                     b.ToTable("PlantData");
                 });
 
             modelBuilder.Entity("Model.PlantContraindication", b =>
                 {
-                    b.Property<long>("PlantContraindicationId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PlantContraindicationId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -60,18 +62,18 @@ namespace MedicalPlant.Migrations
                     b.Property<bool>("Removed")
                         .HasColumnType("bit");
 
-                    b.HasKey("PlantContraindicationId");
+                    b.HasKey("Id");
 
                     b.ToTable("PlantContraindicationData");
                 });
 
             modelBuilder.Entity("Model.PlantContraindicationEntry", b =>
                 {
-                    b.Property<long>("PlantContraindicationEntryId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PlantContraindicationEntryId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<long>("PlantContraindicationId")
                         .HasColumnType("bigint");
@@ -79,9 +81,25 @@ namespace MedicalPlant.Migrations
                     b.Property<long>("PlantId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("PlantContraindicationEntryId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlantId");
 
                     b.ToTable("PlantContraindicationEntryData");
+                });
+
+            modelBuilder.Entity("Model.PlantContraindicationEntry", b =>
+                {
+                    b.HasOne("Model.Plant", null)
+                        .WithMany("PlantContraindicationEntries")
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Model.Plant", b =>
+                {
+                    b.Navigation("PlantContraindicationEntries");
                 });
 #pragma warning restore 612, 618
         }
