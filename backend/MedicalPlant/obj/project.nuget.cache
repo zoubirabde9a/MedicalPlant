@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Jp3SOF2gihA1wgfVDnax2uOTrIkSY7JDL47MxtdY71cE4mu80Q5gEqG+LBjtzNiz4mTIMhgA/Bu7sJ6mOAVCbA==",
+  "dgSpecHash": "nXeAeggWquq6+95ThhFXay8DXqxoS1llqH5hyrZOBxWNscGhxxET3C/9Lktywle3Hefdm2d1JurdS/25zHuxAA==",
   "success": true,
   "projectFilePath": "D:\\workspace\\core\\MedicalPlant\\backend\\MedicalPlant\\MedicalPlant.csproj",
   "expectedPackageFiles": [
@@ -34,6 +34,8 @@
     "C:\\Users\\Aures\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\Aures\\.nuget\\packages\\npgsql\\6.0.0\\npgsql.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aures\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\6.0.0\\npgsql.entityframeworkcore.postgresql.6.0.0.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\Aures\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
