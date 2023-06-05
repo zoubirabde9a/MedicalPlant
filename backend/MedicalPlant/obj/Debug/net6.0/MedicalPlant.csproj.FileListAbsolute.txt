@@ -128,3 +128,5 @@ D:\workspace\core\MedicalPlant\backend\MedicalPlant\obj\Debug\net6.0\refint\Medi
 D:\workspace\core\MedicalPlant\backend\MedicalPlant\obj\Debug\net6.0\MedicalPlant.pdb
 D:\workspace\core\MedicalPlant\backend\MedicalPlant\obj\Debug\net6.0\MedicalPlant.genruntimeconfig.cache
 D:\workspace\core\MedicalPlant\backend\MedicalPlant\obj\Debug\net6.0\ref\MedicalPlant.dll
+D:\workspace\core\MedicalPlant\backend\MedicalPlant\bin\Debug\net6.0\Npgsql.dll
+D:\workspace\core\MedicalPlant\backend\MedicalPlant\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
