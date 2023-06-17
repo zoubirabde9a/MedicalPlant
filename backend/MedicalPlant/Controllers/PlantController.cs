@@ -81,7 +81,7 @@ public class PlantController : Controller
     }
 
 
-    [HttpPost]
+    [HttpGet]
     [Route("Get")]
     public async Task<ActionResult<Plant>> Get(int plantId)
     {
@@ -107,5 +107,12 @@ public class PlantController : Controller
             return new JsonResult(new { error = "Cannot be found!" });         
         }
 
+    }
+    
+    [HttpGet]
+    [Route("GetAll")]
+    public async Task<ActionResult<List<Plant>>> GetAll(int offset, int limit)
+    {
+        return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
     }
 }
