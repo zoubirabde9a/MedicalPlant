@@ -47,8 +47,8 @@ const TableComponent = () => {
         <StyledTable>
             <StyledTableHeader>
                 <StyledTableRow>
-                    <StyledTableCell>Column 1</StyledTableCell>
-                    <StyledTableCell>Column 2</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Description</StyledTableCell>
                 </StyledTableRow>
             </StyledTableHeader>
             <TableBody>
