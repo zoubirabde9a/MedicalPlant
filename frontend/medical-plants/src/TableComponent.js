@@ -47,15 +47,17 @@ const TableComponent = () => {
         <StyledTable>
             <StyledTableHeader>
                 <StyledTableRow>
-                    <StyledTableCell>Name</StyledTableCell>
-                    <StyledTableCell>Description</StyledTableCell>
+                    <StyledTableCell>Nom Latin</StyledTableCell>
+                    <StyledTableCell>Nom Commun</StyledTableCell>
+                    <StyledTableCell>Nom Arabe</StyledTableCell>
                 </StyledTableRow>
             </StyledTableHeader>
             <TableBody>
                 {data.map((item) => (
                     <StyledTableRow key={item.plantId}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.description}</TableCell>
+                        <TableCell>{item.latinName}</TableCell>
+                        <TableCell>{item.commonName}</TableCell>
+                        <TableCell>{item.arabicName}</TableCell>
                     </StyledTableRow>
                 ))}
             </TableBody>
