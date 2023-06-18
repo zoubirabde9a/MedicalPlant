@@ -109,4 +109,52 @@ public class PlantController : Controller
     {
         return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
     }
+    
+    [HttpGet]
+    [Route("GetAllByLatinName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByLatinName(int offset, int limit, string latinNameLike)
+    {
+        if (string.IsNullOrEmpty(latinNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
+    
+    [HttpGet]
+    [Route("GetAllByCommonName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByCommonName(int offset, int limit, string commonNameLike)
+    {
+        if (string.IsNullOrEmpty(commonNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => plant.CommonName.ToLower().Contains(commonNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
+    
+    [HttpGet]
+    [Route("GetAllByArabicName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByArabicName(int offset, int limit, string arabicNameLike)
+    {
+        if (string.IsNullOrEmpty(arabicNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => plant.ArabicName.ToLower().Contains(arabicNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
 }
