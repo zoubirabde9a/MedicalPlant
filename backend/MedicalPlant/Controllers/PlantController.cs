@@ -21,9 +21,9 @@ public class PlantController : Controller
 
     [HttpPost]
     [Route("Add")]
-    public async Task<ActionResult<Plant>> Add(string name)
+    public async Task<ActionResult<Plant>> Add(string latinName, string commonName, string arabicName)
     {
-        var newPlant = Context.PlantData.Add(new Plant { LatinName = name}).Entity;
+        var newPlant = Context.PlantData.Add(new Plant { LatinName = latinName, CommonName = commonName, ArabicName = arabicName}).Entity;
         await Context.SaveChangesAsync();
         return Ok(Json(newPlant).Value);
     }
