@@ -2,6 +2,7 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MedicalPlant.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230618112450_Update4")]
+    partial class Update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,32 +43,32 @@ namespace MedicalPlant.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("OriginId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("OriginId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("PlantClassId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PlantClassId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("PlantDivisionId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PlantDivisionId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("PlantFamilyId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PlantFamilyId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("PlantGenreId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PlantGenreId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("PlantSpeciesId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PlantSpeciesId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("Removed")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("UsedPartId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UsedPartId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("VegetableReignId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("VegetableReignId")
+                        .HasColumnType("integer");
 
                     b.HasKey("PlantId");
 
