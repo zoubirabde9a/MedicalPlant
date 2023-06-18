@@ -27,6 +27,69 @@ public class PlantController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newPlant).Value);
     }
+    
+    [HttpPost]
+    [Route("SetOrigin")]
+    public async Task<ActionResult<Plant>> SetOrigin(long plantId, long originId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        var origin = Context.PlantOriginData.Find(originId);
+        if (plant != null && origin != null)
+        {
+            plant.OriginId = originId;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
+    
+    [HttpPost]
+    [Route("SetVegetableReign")]
+    public async Task<ActionResult<Plant>> SetVegetableReign(long plantId, long vegetableReignId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        var reign = Context.VegetableReignData.Find(vegetableReignId);
+        if (plant != null && reign != null)
+        {
+            plant.VegetableReignId = vegetableReignId;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
+    
+    [HttpPost]
+    [Route("SetPlantDivision")]
+    public async Task<ActionResult<Plant>> SetPlantDivision(long plantId, long plantDivisionId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        var division = Context.PlantDivisionData.Find(plantDivisionId);
+        if (plant != null && division != null)
+        {
+            plant.PlantDivisionId = plantDivisionId;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
+    
+    [HttpPost]
+    [Route("Remove")]
+    public async Task<ActionResult<Plant>> Remove(long plantId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        if (plant != null)
+        {
+            plant.Removed = true;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
 
     [HttpPost]
     [Route("AddContraindication")]
@@ -107,6 +170,54 @@ public class PlantController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<Plant>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).ToListAsync());
+    }
+    
+    [HttpGet]
+    [Route("GetAllByLatinName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByLatinName(int offset, int limit, string latinNameLike)
+    {
+        if (string.IsNullOrEmpty(latinNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
+    
+    [HttpGet]
+    [Route("GetAllByCommonName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByCommonName(int offset, int limit, string commonNameLike)
+    {
+        if (string.IsNullOrEmpty(commonNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => !plant.Removed && plant.CommonName.ToLower().Contains(commonNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
+    
+    [HttpGet]
+    [Route("GetAllByArabicName")]
+    public async Task<ActionResult<List<Plant>>> GetAllByArabicName(int offset, int limit, string arabicNameLike)
+    {
+        if (string.IsNullOrEmpty(arabicNameLike))
+        {
+            return Ok(await Context.PlantData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantData
+                .Where(plant => !plant.Removed && plant.ArabicName.ToLower().Contains(arabicNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
     }
 }
