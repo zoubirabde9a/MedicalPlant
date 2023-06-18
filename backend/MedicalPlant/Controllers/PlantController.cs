@@ -45,6 +45,38 @@ public class PlantController : Controller
     }
     
     [HttpPost]
+    [Route("SetVegetableReign")]
+    public async Task<ActionResult<Plant>> SetVegetableReign(long plantId, long vegetableReignId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        var reign = Context.VegetableReignData.Find(vegetableReignId);
+        if (plant != null && reign != null)
+        {
+            plant.VegetableReignId = vegetableReignId;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
+    
+    [HttpPost]
+    [Route("SetPlantDivision")]
+    public async Task<ActionResult<Plant>> SetPlantDivision(long plantId, long plantDivisionId)
+    {
+        var plant = Context.PlantData.Find(plantId);
+        var division = Context.PlantDivisionData.Find(plantDivisionId);
+        if (plant != null && division != null)
+        {
+            plant.PlantDivisionId = plantDivisionId;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
+    
+    [HttpPost]
     [Route("Remove")]
     public async Task<ActionResult<Plant>> Remove(long plantId)
     {
