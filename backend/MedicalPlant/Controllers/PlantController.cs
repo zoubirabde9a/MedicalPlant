@@ -21,9 +21,9 @@ public class PlantController : Controller
 
     [HttpPost]
     [Route("Add")]
-    public async Task<ActionResult<Plant>> Add(string name, string description)
+    public async Task<ActionResult<Plant>> Add(string latinName, string commonName, string arabicName)
     {
-        var newPlant = Context.PlantData.Add(new Plant { Name = name, Description = description }).Entity;
+        var newPlant = Context.PlantData.Add(new Plant { LatinName = latinName, CommonName = commonName, ArabicName = arabicName}).Entity;
         await Context.SaveChangesAsync();
         return Ok(Json(newPlant).Value);
     }
@@ -91,12 +91,6 @@ public class PlantController : Controller
         if (list != null && list.Count > 0)
         {
             Plant plant = list[0];
-
-            var entryList = Context.PlantContraindicationEntryData.Where(plantEntry => plantEntry.PlantId == plant.PlantId);
-            if (entryList != null)
-            {
-                plant.PlantContraindicationEntries = entryList.ToList();
-            }
 
             return Ok(Json(plant).Value);
         }
