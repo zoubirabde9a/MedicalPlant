@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.element {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.properties {
+  gap: 5px;
+  margin: 12px;
+  padding: 12px;
+}
+
+.property {
+  display: flex;
+  align-items: center;
+  margin: 12px;
+}
+
+.property-name {
+  font-weight: bold;
+}
+
+.property-value {
+  margin-left: 5px;
+}
+
+.text {
+  grid-column: 1 / -1; /* Span all columns */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
