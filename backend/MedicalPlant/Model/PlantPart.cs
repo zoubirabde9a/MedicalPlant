@@ -3,7 +3,7 @@ namespace Model;
 public class PlantPart
 {
     public long PlantPartId { get; set; }
-    public string LatinName { get; set; }
+    public string LatinName { get; set; } = "";
 
     // Upon removal of plants, we keep them in the database
     // With Removed boolean set to true

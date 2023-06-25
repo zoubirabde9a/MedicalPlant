@@ -23,6 +23,27 @@ public class PlantController : Controller
     [Route("Add")]
     public async Task<ActionResult<Plant>> Add(string latinName, string commonName, string arabicName)
     {
+        if (latinName == null)
+        {
+            latinName = "";
+        }
+
+        if (commonName == null)
+        {
+            commonName = "";
+        }
+
+        if (arabicName == null)
+        {
+            arabicName = "";
+        }
+
+        var list = await Context.PlantData.Where(plant => plant.LatinName.ToLower().Equals(latinName.ToLower())).ToListAsync();
+        if (list != null && list.Count > 0)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Entry already exists!" });
+        }
         var newPlant = Context.PlantData.Add(new Plant { LatinName = latinName, CommonName = commonName, ArabicName = arabicName}).Entity;
         await Context.SaveChangesAsync();
         return Ok(Json(newPlant).Value);
@@ -170,7 +191,13 @@ public class PlantController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<Plant>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).ToListAsync());
+        var list = await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).ToListAsync();
+        List<PlantData> dataList = new List<PlantData>(list.Count);
+        foreach (var plant in list)
+        {
+            dataList.Add(await PlantData.FromPlant(plant, Context));
+        }
+        return Ok(dataList);
     }
     
     [HttpGet]
