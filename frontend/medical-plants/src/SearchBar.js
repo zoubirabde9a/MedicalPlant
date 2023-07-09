@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function SearchBar(props) {
-    const {setFilterText, setFilter} = props;
+    const {currentPage, setFilterText, setFilter} = props;
     const [searchText, setSearchText] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('');
 
@@ -29,12 +29,14 @@ function SearchBar(props) {
                 value={searchText}
                 onChange={handleTextChange}
             />
+            {( currentPage == 'home' &&
             <select value={selectedFilter} onChange={(e) => handleFilterChange(e.target.value)}>
                 <option value="">Select Filter</option>
                 <option value="latinName">Nom Latin</option>
                 <option value="arabicName">Nom Arabe</option>
                 <option value="commonName">Nom Commun</option>
             </select>
+            )}
             <button onClick={handleSearch}>Recherche</button>
         </div>
     );

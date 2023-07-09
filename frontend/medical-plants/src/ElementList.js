@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import ElementComponent from './ElementComponent';
+import AddPlant from "./AddPlant";
 
 const ElementList = (props) => {
-    const {filter, filterText} = props;
+    const {filter, filterText, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList, plantGenreList, plantPartList, plantSpeciesList} = props;
+
     const elements = [];
+    const [showModal, setShowModal] = useState(false);
 
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -27,7 +30,7 @@ const ElementList = (props) => {
                 setData(data)
             })
             .catch(error => console.log(error));
-    }, [filter, filterText]);
+    }, [filter, filterText, showModal]);
 
     data.map((item) =>
     {
@@ -46,8 +49,21 @@ const ElementList = (props) => {
         elements.push({text: item.latinName, properties: properties})
     })
 
+    const handleAddPlant= () =>
+    {
+        setShowModal(!showModal);
+    }
+
     return (
+        <div>
+            <button className='modifyButton' onClick={handleAddPlant}>Ajouter</button>
+
+        <AddPlant showModal = {showModal} setShowModal = {setShowModal} originList={originList} divisionList = {divisionList}
+                  vegetableReignList = {vegetableReignList} plantClassList = {plantClassList}
+                  plantFamilyList = {plantFamilyList} plantGenreList = {plantGenreList} plantSpeciesList = {plantSpeciesList} plantPartList = {plantPartList}></AddPlant>
+
         <div className="element-list">
+
             {elements.map((element, index) => (
                 <ElementComponent
                     key={index}
@@ -55,6 +71,7 @@ const ElementList = (props) => {
                     text={element.text}
                 />
             ))}
+        </div>
         </div>
     );
 };

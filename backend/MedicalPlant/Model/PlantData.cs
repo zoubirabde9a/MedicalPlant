@@ -7,14 +7,25 @@ public class PlantData
     public string LatinName { get; set; }
     public string CommonName { get; set; }
     public string ArabicName { get; set; }
-    public string Origin { get; set; }
-    public string VegetableReign { get; set; } // Régne
-    public string PlantDivision { get; set; }
-    public string PlantClass { get; set; }
-    public string PlantFamily { get; set; }
-    public string PlantGenre { get; set; }
-    public string PlantSpecies { get; set; }
-    public string UsedPart { get; set; }
+    public PlantOrigin Origin { get; set; }
+    public VegetableReign VegetableReign { get; set; } // Régne
+    public PlantDivision PlantDivision { get; set; }
+    public PlantClass PlantClass { get; set; }
+    public PlantFamily PlantFamily { get; set; }
+    public PlantGenre PlantGenre { get; set; }
+    public PlantSpecies PlantSpecies { get; set; }
+    public PlantPart UsedPart { get; set; }
+
+    async public static Task<List<PlantData>> ToList(List<Plant> list, DataContext context)
+    {
+        List<PlantData> dataList = new List<PlantData>(list.Count);
+        foreach (var plant in list)
+        {
+            dataList.Add(await FromPlant(plant, context));
+        }
+
+        return dataList;
+    }
 
     async public static Task<PlantData> FromPlant(Plant plant, DataContext context)
     {
@@ -41,14 +52,14 @@ public class PlantData
             LatinName = plant.LatinName,
             CommonName = plant.CommonName,
             ArabicName = plant.ArabicName,
-            Origin = origin.LatinName,
-            PlantClass = plantClass.LatinName,
-            PlantDivision = plantDevision.LatinName,
-            PlantFamily = plantFamily.LatinName,
-            PlantGenre = plantGenre.LatinName,
-            VegetableReign = vegetableReign.LatinName,
-            PlantSpecies = plantSpecies.LatinName,
-            UsedPart = plantUsedPart.LatinName
+            Origin = origin,
+            PlantClass = plantClass,
+            PlantDivision = plantDevision,
+            PlantFamily = plantFamily,
+            PlantGenre = plantGenre,
+            VegetableReign = vegetableReign,
+            PlantSpecies = plantSpecies,
+            UsedPart = plantUsedPart
         };
     }
 }

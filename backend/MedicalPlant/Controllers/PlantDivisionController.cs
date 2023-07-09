@@ -53,4 +53,20 @@ public class PlantDivisionController : Controller
     {
         return Ok(await Context.PlantDivisionData.Skip(offset).Take(limit).ToListAsync());
     }
+    
+    [HttpGet]
+    [Route("GetAllByLatinName")]
+    public async Task<ActionResult<List<PlantDivision>>> GetAllByLatinName(int offset, int limit, string latinNameLike)
+    {
+        if (string.IsNullOrEmpty(latinNameLike))
+        {
+            return Ok(await Context.PlantDivisionData.Skip(offset).Take(limit).ToListAsync());
+        }
+        else
+        {
+            return Ok(await Context.PlantDivisionData
+                .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
+                .ToListAsync());
+        }
+    }
 }

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { styled } from '@mui/system';
 import {AppBar, Button, Toolbar, Typography} from '@mui/material';
+import AddPlant from "./AddPlant";
 
 
 const StyledAppBar = styled(AppBar)(() => ({
@@ -15,14 +16,73 @@ const StyledTypography = styled(Typography)(() => ({
     color: '#000000',
 }));
 
-const TaskBar = () => {
+const TaskBar = (props) => {
+
+    const {setCurrentPage} = props;
+
+    const [showModal, setShowModal] = useState(false);
+    const handleSubmit = () =>
+    {
+        setShowModal(!showModal);
+    }
+
+    const handlePlantListSubmit = () =>
+    {
+        setCurrentPage('home')
+    }
+    const handleOriginListSubmit = () =>
+    {
+        setCurrentPage('plantOrigin')
+    }
+
+    const handleVegetableReignListSubmit = () =>
+    {
+        setCurrentPage('vegetableReign')
+    }
+
+    const handleDivisionListSubmit = () =>
+    {
+        setCurrentPage('plantDivision')
+    }
+
+    const handleClassListSubmit = () =>
+    {
+        setCurrentPage('plantClass')
+    }
+
+    const handleFamilyListSubmit = () =>
+    {
+        setCurrentPage('plantFamily')
+    }
+
+    const handleGenreListSubmit = () =>
+    {
+        setCurrentPage('plantGenre')
+    }
+
+    const handlePlantSpeciesListSubmit = () =>
+    {
+        setCurrentPage('plantSpecies')
+    }
+
+    const handlePlantPartListSubmit = () =>
+    {
+        setCurrentPage('plantPart')
+    }
+
     return (
         <StyledAppBar position="static">
             <Toolbar>
-                <StyledTypography variant="h6">Plants</StyledTypography>
-                <StyledButton color="inherit">PlantList</StyledButton>
-                <StyledButton color="inherit">Add Plant</StyledButton>
-                <StyledButton color="inherit">Add Something</StyledButton>
+                <StyledTypography variant="h6">Plantes</StyledTypography>
+                <StyledButton onClick={handlePlantListSubmit} color="inherit">Liste Plante</StyledButton>
+                <StyledButton onClick={handleOriginListSubmit} color="inherit">Liste Origine</StyledButton>
+                <StyledButton onClick={handleVegetableReignListSubmit} color="inherit">Liste Reigne</StyledButton>
+                <StyledButton onClick={handleDivisionListSubmit} color="inherit">Liste Division</StyledButton>
+                <StyledButton onClick={handleClassListSubmit} color="inherit">Liste Classe</StyledButton>
+                <StyledButton onClick={handleFamilyListSubmit} color="inherit">Liste Famille</StyledButton>
+                <StyledButton onClick={handleGenreListSubmit} color="inherit">Liste Genre</StyledButton>
+                <StyledButton onClick={handlePlantSpeciesListSubmit} color="inherit">Liste Èspece</StyledButton>
+                <StyledButton onClick={handlePlantPartListSubmit} color="inherit">Liste Partie Utilisee</StyledButton>
             </Toolbar>
         </StyledAppBar>
     );
