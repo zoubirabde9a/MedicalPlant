@@ -4,6 +4,7 @@ namespace Model;
 
 public class PlantData
 {
+    public long PlantId { get; set; }
     public string LatinName { get; set; }
     public string CommonName { get; set; }
     public string ArabicName { get; set; }
@@ -49,6 +50,7 @@ public class PlantData
 
         return new PlantData
         {
+            PlantId = plant.PlantId,
             LatinName = plant.LatinName,
             CommonName = plant.CommonName,
             ArabicName = plant.ArabicName,

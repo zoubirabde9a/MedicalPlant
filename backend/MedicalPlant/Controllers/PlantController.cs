@@ -99,9 +99,24 @@ public class PlantController : Controller
     
     [HttpPost]
     [Route("Update")]
-    public async Task<ActionResult<Plant>> SetPlantDivision(long plantId, long plantOriginId, long plantDivisionId, long plantVegetableReignId,
+    public async Task<ActionResult<Plant>> Update(long plantId, string latinName, string commonName, string arabicName, long plantOriginId, long plantDivisionId, long plantVegetableReignId,
         long plantClassId, long plantFamilyId, long plantGenreId, long plantSpeciesId ,long plantPartId)
     {
+        if (latinName == null)
+        {
+            new JsonResult(new { error = "Latin name cant be null" });  
+        }
+
+        if (commonName == null)
+        {
+            commonName = "";
+        }
+
+        if (arabicName == null)
+        {
+            arabicName = "";
+        }
+        
         var plant = Context.PlantData.Find(plantId);
         var division = Context.PlantDivisionData.Find(plantDivisionId);
         var plantOrigin = Context.PlantOriginData.Find(plantOriginId);
@@ -159,8 +174,11 @@ public class PlantController : Controller
         {
             new JsonResult(new { error = "plantPart cannot be found!" });  
         }
-        
- 
+
+        plant.LatinName = latinName;
+        plant.CommonName = commonName;
+        plant.ArabicName = arabicName;
+            
         plant.PlantDivisionId = plantDivisionId;
         plant.OriginId = plantOriginId;
         plant.VegetableReignId = plantVegetableReignId; 
@@ -270,7 +288,7 @@ public class PlantController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<Plant>>> GetAll(int offset, int limit)
     {
-        var list = await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).ToListAsync();
+        var list = await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).OrderBy(plant => plant.PlantId).ToListAsync();
         return Ok(await PlantData.ToList(list, Context));
     }
     
@@ -285,7 +303,7 @@ public class PlantController : Controller
         else
         {
             return Ok(await PlantData.ToList(await Context.PlantData
-                .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
+                .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit).OrderBy(plant => plant.PlantId)
                 .ToListAsync(), Context));
         }
     }
@@ -301,7 +319,7 @@ public class PlantController : Controller
         else
         {
             return Ok(await PlantData.ToList(await Context.PlantData
-                .Where(plant => !plant.Removed && plant.CommonName.ToLower().Contains(commonNameLike.ToLower())).Skip(offset).Take(limit)
+                .Where(plant => !plant.Removed && plant.CommonName.ToLower().Contains(commonNameLike.ToLower())).Skip(offset).Take(limit).OrderBy(plant => plant.PlantId)
                 .ToListAsync(), Context));
         }
     }
@@ -317,7 +335,7 @@ public class PlantController : Controller
         else
         {
             return Ok(await PlantData.ToList(await Context.PlantData
-                .Where(plant => !plant.Removed && plant.ArabicName.ToLower().Contains(arabicNameLike.ToLower())).Skip(offset).Take(limit)
+                .Where(plant => !plant.Removed && plant.ArabicName.ToLower().Contains(arabicNameLike.ToLower())).Skip(offset).Take(limit).OrderBy(plant => plant.PlantId)
                 .ToListAsync(), Context));
         }
     }
