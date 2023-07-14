@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import ErrorComponent from "./ErrorComponent";
 
-const AddPlant = (props) => {
+const ModifyPlant = (props) => {
 
-    const {showModal, setShowModal, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList, plantGenreList, plantSpeciesList, plantPartList} = props;
+    const {showModal, setRefresh, setShowModal, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList, plantGenreList, plantSpeciesList, plantPartList, plantId, setPlantId} = props;
 
     const [errorMessage, setErrorMessage] = useState('');
     const [latinName, setLatinName] = useState('');
@@ -72,38 +72,38 @@ const AddPlant = (props) => {
         setUsedPart(e.target.value);
     }
 
+    useEffect(() => {
+        fetch('http://localhost:5202/api/Plant/Get?plantId=' + plantId)
+            .then(response => response.json())
+            .then(data => {
+                setLatinName(data.latinName);
+                setCommonName(data.commonName);
+                setArabicName(data.arabicName);
+                setOrigin(data.originId);
+                setVegetableReign(data.vegetableReignId);
+                setDivision(data.plantDivisionId);
+                setClass(data.plantClassId);
+                setFamily(data.plantFamilyId);
+                setGenre(data.plantGenreId);
+                setSpecies(data.plantSpeciesId);
+                setUsedPart(data.usedPartId);
+            })
+            .catch(error => console.log(error));
+
+    }, []);
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        var plantId = -1;
-        // Add the plant
-        {
-            const queryParams = new URLSearchParams();
-            queryParams.append('latinName', latinName);
-            queryParams.append('commonName', commonName);
-            queryParams.append('arabicName', arabicName);
-
-            const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                plantId = data.plantId;
-                setErrorMessage(data.error);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
 
         // Update plant values
         if (plantId != -1){
             const queryParams = new URLSearchParams();
             queryParams.append('plantId', plantId);
+            queryParams.append('latinName', latinName);
+            queryParams.append('commonName', commonName);
+            queryParams.append('arabicName', arabicName);
             queryParams.append('plantOriginId', originId);
             queryParams.append('plantDivisionId', divisionId);
             queryParams.append('plantVegetableReignId', vegetableReignId);
@@ -128,21 +128,9 @@ const AddPlant = (props) => {
             }
         }
 
-        // Reset the text fields
-        setLatinName('');
-        setCommonName('');
-        setArabicName('');
-        setOrigin(0)
-        setDivision(0)
-        setVegetableReign(0)
-        setClass(0)
-        setFamily(0)
-        setGenre(0)
-        setSpecies(0)
-        setUsedPart(0)
-
         // Close the modal
         setShowModal(false);
+        setRefresh(true);
     };
 
     return (
@@ -280,7 +268,7 @@ const AddPlant = (props) => {
                             </label>
                             <br/>
 
-                            <button className='modal-item' type="submit">Ajouter</button>
+                            <button className='modal-item' type="submit">Modifier</button>
                         </form>
                     </div>
                 </div>
@@ -289,4 +277,4 @@ const AddPlant = (props) => {
     );
 };
 
-export default AddPlant;
+export default ModifyPlant;

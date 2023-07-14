@@ -104,6 +104,9 @@ const AddPlant = (props) => {
         if (plantId != -1){
             const queryParams = new URLSearchParams();
             queryParams.append('plantId', plantId);
+            queryParams.append('latinName', latinName);
+            queryParams.append('commonName', commonName);
+            queryParams.append('arabicName', arabicName);
             queryParams.append('plantOriginId', originId);
             queryParams.append('plantDivisionId', divisionId);
             queryParams.append('plantVegetableReignId', vegetableReignId);

@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
+import AddPlant from "./AddPlant";
+import ModifyPlant from "./ModifyPlant";
 
-const ElementComponent = ({ properties, text }) => {
+const ElementComponent = ({ plantId, setRefresh, properties, text , originList, divisionList, vegetableReignList,
+                              plantClassList, plantFamilyList, plantGenreList, plantPartList, plantSpeciesList}) => {
 
     const [showModal, setShowModal] = useState(false);
-    const [latinName, setLatinName] = useState(properties.latinName);
-    const [commonName, setCommonName] = useState(properties.commonName);
-    const [arabicName, setArabicName] = useState(properties.arabicName);
+
 
     const handleButtonClick = () => {
         setShowModal(true);
@@ -15,17 +16,7 @@ const ElementComponent = ({ properties, text }) => {
         setShowModal(false);
     };
 
-    const handleLatinNameChange = (e) => {
-        setLatinName(e.target.value);
-    };
 
-    const handleCommonNameChange = (e) => {
-        setCommonName(e.target.value);
-    };
-
-    const handleArabicNameChange = (e) => {
-        setArabicName(e.target.value);
-    };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -37,7 +28,7 @@ const ElementComponent = ({ properties, text }) => {
         <div className="element">
             <div className="text">
                 <img src="favicon.ico" alt="Small Image"/>
-                <div>
+                <div className='element-name'>
                     {text}
                 </div>
                 <button className='modifyButton' onClick={handleButtonClick}>Modifier</button>
@@ -52,52 +43,9 @@ const ElementComponent = ({ properties, text }) => {
                 ))}
             </div>
 
-            {showModal && (
-                <div className="modal">
-                    <div className="modal-content">
-            <span className="close" onClick={handleCloseModal}>
-              &times;
-            </span>
-
-                        <form onSubmit={handleSubmit}>
-                            <label className='modal-item'>
-                                Nom Latin:
-                                <input className='modal-item'
-                                       type="text"
-                                       name="latinName"
-                                       value={latinName}
-                                       onChange={handleLatinNameChange}
-                                />
-                            </label>
-                            <br/>
-
-                            <label className='modal-item'>
-                                Nom Commun:
-                                <input className='modal-item'
-                                       type="text"
-                                       name="communName"
-                                       value={commonName}
-                                       onChange={handleCommonNameChange}
-                                />
-                            </label>
-                            <br/>
-
-                            <label className='modal-item'>
-                                Nom Arabe:
-                                <input className='modal-item'
-                                       type="text"
-                                       name="arabicName"
-                                       value={arabicName}
-                                       onChange={handleArabicNameChange}
-                                />
-                            </label>
-                            <br/>
-
-                            <button className='modal-item' type="submit">Modifier</button>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {showModal &&  <ModifyPlant plantId = {plantId} setRefresh = {setRefresh} showModal = {showModal} setShowModal = {setShowModal} originList={originList} divisionList = {divisionList}
+                                     vegetableReignList = {vegetableReignList} plantClassList = {plantClassList}
+                                     plantFamilyList = {plantFamilyList} plantGenreList = {plantGenreList} plantSpeciesList = {plantSpeciesList} plantPartList = {plantPartList}></ModifyPlant>}
 
         </div>
     );

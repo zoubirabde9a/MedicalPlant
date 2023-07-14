@@ -6,21 +6,28 @@ const ElementList = (props) => {
     const {filter, filterText, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList, plantGenreList, plantPartList, plantSpeciesList} = props;
 
     const elements = [];
+    const ids = [];
     const [showModal, setShowModal] = useState(false);
 
+
     const [data, setData] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+
+    const [pageSize, setPageSize] = useState(500);
+    const [pageOffset, setPageOffset] = useState(0);
+
     useEffect(() => {
-        var path = 'http://localhost:5202/api/Plant/GetAll?offset=0&limit=20';
+        var path = `http://localhost:5202/api/Plant/GetAll?offset=${pageOffset}&limit=${pageSize}`;
         if (filterText && filterText.length > 0) {
             switch (filter) {
                 case 'latinName':
-                    path = 'http://localhost:5202/api/Plant/GetAllByLatinName?offset=0&limit=20&latinNameLike=' + filterText;
+                    path = `http://localhost:5202/api/Plant/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=${filterText}`;
                     break;
                 case 'commonName':
-                    path = 'http://localhost:5202/api/Plant/GetAllByCommonName?offset=0&limit=20&commonNameLike=' + filterText;
+                    path = `http://localhost:5202/api/Plant/GetAllByCommonName?offset=${pageOffset}&limit=${pageSize}&commonNameLike=${filterText}`;
                     break;
                 case 'arabicName':
-                    path = 'http://localhost:5202/api/Plant/GetAllByArabicName?offset=0&limit=20&arabicNameLike=' + filterText;
+                    path = `http://localhost:5202/api/Plant/GetAllByArabicName?offset=${pageOffset}&limit=${pageSize}&arabicNameLike=${filterText}`;
                     break;
             }
         }
@@ -28,9 +35,12 @@ const ElementList = (props) => {
             .then(response => response.json())
             .then(data => {
                 setData(data)
+
             })
             .catch(error => console.log(error));
-    }, [filter, filterText, showModal]);
+
+    }, [filter, filterText, showModal, refresh]);
+
 
     data.map((item) =>
     {
@@ -47,8 +57,8 @@ const ElementList = (props) => {
         properties.push( { name: 'Èspéce', value: item.plantSpecies.latinName })
         properties.push( { name: 'Partie Utilisé', value: item.usedPart.latinName })
         elements.push({text: item.latinName, properties: properties})
+        ids.push(item.plantId)
     })
-
     const handleAddPlant= () =>
     {
         setShowModal(!showModal);
@@ -66,9 +76,13 @@ const ElementList = (props) => {
 
             {elements.map((element, index) => (
                 <ElementComponent
-                    key={index}
+                    plantId={ids[index]}
                     properties={element.properties}
                     text={element.text}
+                    setRefresh={setRefresh}
+                    originList={originList} divisionList = {divisionList}
+                    vegetableReignList = {vegetableReignList} plantClassList = {plantClassList}
+                    plantFamilyList = {plantFamilyList} plantGenreList = {plantGenreList} plantSpeciesList = {plantSpeciesList} plantPartList = {plantPartList}
                 />
             ))}
         </div>

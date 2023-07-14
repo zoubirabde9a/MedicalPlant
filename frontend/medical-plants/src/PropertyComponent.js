@@ -20,13 +20,10 @@ const PropertyComponent = ({ properties, text }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        var plantId = -1;
         // Add the plant
         {
             const queryParams = new URLSearchParams();
             queryParams.append('latinName', latinName);
-            queryParams.append('commonName', commonName);
-            queryParams.append('arabicName', arabicName);
 
             const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;
             try {
@@ -37,8 +34,6 @@ const PropertyComponent = ({ properties, text }) => {
                     }
                 });
                 const data = await response.json();
-                plantId = data.plantId;
-                setErrorMessage(data.error);
             } catch (error) {
                 console.error('Error:', error);
             }

@@ -28,23 +28,32 @@ code {
   border: 1px solid #ccc;
   padding: 6px;
   background-color: #f2f2f2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  margin: 10px;
+}
+
+.element-name
+{
+  background-color: #cccccc;
+  border-radius: 4px;
+  font-size: xx-large;
 }
 
 .properties {
   display: contents;
   gap: 5px;
-  margin: 6px;
-  padding: 6px;
+  margin: 3px;
+  padding: 3px;
   background-color: #f2f2f2;
 }
 
 .property {
   display: flow;
   align-items: center;
-  margin: 6px;
-  padding: 20px;
-  border-radius: 8px;
-  background: linear-gradient(to right, #72cc72, #009933);
+  margin: 3px;
+  padding: 10px;
+  border-radius: 4px;
+  background: #cccccc;
   align-content: center;
   align-self: center;
 
@@ -53,12 +62,15 @@ code {
 
 .property-name {
   font-weight: bold;
-  color: blue;
+  color: white;
+  font-size: large;
 }
 
 .property-value {
   margin-left: 5px;
-  color: yellow;
+  color: black;
+  font-weight: bold;
+  font-size: large;
 }
 
 .text {
@@ -70,7 +82,6 @@ code {
   margin: 6px;
   padding: 20px;
   border-radius: 8px;
-  background: linear-gradient(to right, yellow, yellowgreen);
 }
 
 .title-text
@@ -94,13 +105,11 @@ code {
 }
 
 .modal-content {
-  display: grid;
   grid-template-columns: 1fr 1fr; /* Two equal-width columns */
   grid-gap: 10px; /* Spacing between grid cells */
   padding: 20px;
-  width: 300px;
   border-radius: 24px;
-  background: linear-gradient(to right, #72cc72, #009933);
+  background: #cccccc;
   align-content: center;
   align-self: center;
 
