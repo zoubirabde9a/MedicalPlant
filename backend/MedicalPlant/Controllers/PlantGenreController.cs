@@ -6,11 +6,11 @@ namespace Controllers;
 
 
 [Route("api/[controller]")]
-public class VegetableReignController : Controller
+public class PlantGenreController : Controller
 {
     DataContext Context;
 
-    public VegetableReignController(DataContext context)
+    public PlantGenreController(DataContext context)
     {
         Context = context;
     }
@@ -18,23 +18,23 @@ public class VegetableReignController : Controller
 
     [HttpPost]
     [Route("Add")]
-    public async Task<ActionResult<VegetableReign>> Add(string latinName)
+    public async Task<ActionResult<PlantGenre>> Add(string latinName)
     {
-        var newElement = Context.VegetableReignData.Add(new VegetableReign { LatinName = latinName}).Entity;
+        var newElement = Context.PlantGenreData.Add(new PlantGenre { LatinName = latinName}).Entity;
         await Context.SaveChangesAsync();
         return Ok(Json(newElement).Value);
     }
 
     [HttpGet]
     [Route("Get")]
-    public async Task<ActionResult<VegetableReign>> Get(int vegetableReignId)
+    public async Task<ActionResult<PlantGenre>> Get(int PlantGenreId)
     {
-        var newObject = Context.VegetableReignData.Where(origin => origin.VegetableReignId == vegetableReignId);
+        var newObject = Context.PlantGenreData.Where(origin => origin.PlantGenreId == PlantGenreId);
         
         var list = newObject.ToList();
         if (list != null && list.Count > 0)
         {
-            VegetableReign element = list[0];
+            PlantGenre element = list[0];
 
             return Ok(Json(element).Value);
         }
@@ -49,9 +49,9 @@ public class VegetableReignController : Controller
     
     [HttpGet]
     [Route("GetAll")]
-    public async Task<ActionResult<List<VegetableReign>>> GetAll(int offset, int limit)
+    public async Task<ActionResult<List<PlantGenre>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.VegetableReignData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.PlantGenreData.Skip(offset).Take(limit).ToListAsync());
     }
     
     [HttpGet]
@@ -60,11 +60,11 @@ public class VegetableReignController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await Context.VegetableReignData.Skip(offset).Take(limit).ToListAsync());
+            return Ok(await Context.PlantGenreData.Skip(offset).Take(limit).ToListAsync());
         }
         else
         {
-            return Ok(await Context.VegetableReignData
+            return Ok(await Context.PlantGenreData
                 .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
                 .ToListAsync());
         }
