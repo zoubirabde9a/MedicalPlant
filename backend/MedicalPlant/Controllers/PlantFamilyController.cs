@@ -24,12 +24,42 @@ public class PlantFamilyController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newElement).Value);
     }
+    
+    [HttpPost]
+    [Route("Update")]
+    public async Task<ActionResult<PlantFamily>> Update(long id, string latinName)
+    {
+        var plantFamily = Context.PlantFamilyData.Find(id);
+        if (plantFamily == null)
+        {
+            return new JsonResult(new { error = "Cannot be found!" }); 
+        }
+
+        plantFamily.LatinName = latinName;
+        await Context.SaveChangesAsync();
+        return Ok(Json(plantFamily).Value);
+    }
+    
+    [HttpPost]
+    [Route("Remove")]
+    public async Task<ActionResult<PlantFamily>> Remove(long id)
+    {
+        var plant = Context.PlantFamilyData.Find(id);
+        if (plant != null)
+        {
+            plant.Removed = true;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
 
     [HttpGet]
     [Route("Get")]
-    public async Task<ActionResult<PlantFamily>> Get(int PlantFamilyId)
+    public async Task<ActionResult<PlantFamily>> Get(int plantFamilyId)
     {
-        var newObject = Context.PlantFamilyData.Where(origin => origin.PlantFamilyId == PlantFamilyId);
+        var newObject = Context.PlantFamilyData.Where(origin => origin.PlantFamilyId == plantFamilyId);
         
         var list = newObject.ToList();
         if (list != null && list.Count > 0)
@@ -51,7 +81,7 @@ public class PlantFamilyController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<PlantFamily>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.PlantFamilyData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.PlantFamilyData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
     }
     
     [HttpGet]
@@ -60,7 +90,7 @@ public class PlantFamilyController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await Context.PlantFamilyData.Skip(offset).Take(limit).ToListAsync());
+            return Ok(await Context.PlantFamilyData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
         }
         else
         {

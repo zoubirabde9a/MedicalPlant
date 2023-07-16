@@ -24,6 +24,36 @@ public class PlantDivisionController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newElement).Value);
     }
+    
+    [HttpPost]
+    [Route("Update")]
+    public async Task<ActionResult<PlantDivision>> Update(long id, string latinName)
+    {
+        var obj = Context.PlantDivisionData.Find(id);
+        if (obj == null)
+        {
+            return new JsonResult(new { error = "Cannot be found!" }); 
+        }
+
+        obj.LatinName = latinName;
+        await Context.SaveChangesAsync();
+        return Ok(Json(obj).Value);
+    }
+    
+    [HttpPost]
+    [Route("Remove")]
+    public async Task<ActionResult<PlantDivision>> Remove(long id)
+    {
+        var plant = Context.PlantDivisionData.Find(id);
+        if (plant != null)
+        {
+            plant.Removed = true;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
 
     [HttpGet]
     [Route("Get")]
@@ -51,7 +81,7 @@ public class PlantDivisionController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<PlantDivision>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.PlantDivisionData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.PlantDivisionData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
     }
     
     [HttpGet]
@@ -60,7 +90,7 @@ public class PlantDivisionController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await Context.PlantDivisionData.Skip(offset).Take(limit).ToListAsync());
+            return Ok(await Context.PlantDivisionData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
         }
         else
         {
