@@ -24,6 +24,36 @@ public class VegetableReignController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newElement).Value);
     }
+    
+    [HttpPost]
+    [Route("Update")]
+    public async Task<ActionResult<VegetableReign>> Update(long id, string latinName)
+    {
+        var vegetableReign = Context.VegetableReignData.Find(id);
+        if (vegetableReign == null)
+        {
+            return new JsonResult(new { error = "Cannot be found!" }); 
+        }
+
+        vegetableReign.LatinName = latinName;
+        await Context.SaveChangesAsync();
+        return Ok(Json(vegetableReign).Value);
+    }
+    
+    [HttpPost]
+    [Route("Remove")]
+    public async Task<ActionResult<VegetableReign>> Remove(long id)
+    {
+        var plant = Context.VegetableReignData.Find(id);
+        if (plant != null)
+        {
+            plant.Removed = true;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
 
     [HttpGet]
     [Route("Get")]
@@ -51,7 +81,7 @@ public class VegetableReignController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<VegetableReign>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.VegetableReignData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.VegetableReignData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
     }
     
     [HttpGet]
@@ -60,7 +90,7 @@ public class VegetableReignController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await Context.VegetableReignData.Skip(offset).Take(limit).ToListAsync());
+            return Ok(await Context.VegetableReignData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
         }
         else
         {

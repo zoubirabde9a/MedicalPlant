@@ -24,12 +24,42 @@ public class PlantOriginController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newPlant).Value);
     }
+    
+    [HttpPost]
+    [Route("Update")]
+    public async Task<ActionResult<PlantOrigin>> Update(long id, string latinName)
+    {
+        var plantOrigin = Context.PlantOriginData.Find(id);
+        if (plantOrigin == null)
+        {
+            return new JsonResult(new { error = "Cannot be found!" }); 
+        }
+
+        plantOrigin.LatinName = latinName;
+        await Context.SaveChangesAsync();
+        return Ok(Json(plantOrigin).Value);
+    }
+    
+    [HttpPost]
+    [Route("Remove")]
+    public async Task<ActionResult<PlantOrigin>> Remove(long id)
+    {
+        var plant = Context.PlantOriginData.Find(id);
+        if (plant != null)
+        {
+            plant.Removed = true;
+            await Context.SaveChangesAsync();
+            return Ok(Json(plant).Value);
+        }
+        
+        return new JsonResult(new { error = "Cannot be found!" });   
+    }
 
     [HttpGet]
     [Route("Get")]
-    public async Task<ActionResult<PlantOrigin>> Get(int originId)
+    public async Task<ActionResult<PlantOrigin>> Get(int plantOriginId)
     {
-        var newObject = Context.PlantOriginData.Where(origin => origin.PlantOriginId == originId);
+        var newObject = Context.PlantOriginData.Where(origin => origin.PlantOriginId == plantOriginId);
         
         var list = newObject.ToList();
         if (list != null && list.Count > 0)
@@ -51,7 +81,7 @@ public class PlantOriginController : Controller
     [Route("GetAll")]
     public async Task<ActionResult<List<PlantOrigin>>> GetAll(int offset, int limit)
     {
-        return Ok(await Context.PlantOriginData.Skip(offset).Take(limit).ToListAsync());
+        return Ok(await Context.PlantOriginData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
     }
     
     [HttpGet]
@@ -60,7 +90,7 @@ public class PlantOriginController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await Context.PlantOriginData.Skip(offset).Take(limit).ToListAsync());
+            return Ok(await Context.PlantOriginData.Where(division => !division.Removed).Skip(offset).Take(limit).ToListAsync());
         }
         else
         {
