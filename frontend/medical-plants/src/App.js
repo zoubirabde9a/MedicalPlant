@@ -95,6 +95,14 @@ const App = () => {
           {(currentPage == 'plantGenre' && <PropertyList filter={'PlantGenre'} filterText={filterText}/>)}
           {(currentPage == 'plantSpecies' && <PropertyList filter={'PlantSpecies'} filterText={filterText}/>)}
           {(currentPage == 'plantPart' && <PropertyList filter={'PlantPart'} filterText={filterText}/>)}
+
+          {(currentPage == 'PlantConstituent' && <PropertyList filter={'PlantConstituent'} filterText={filterText}/>)}
+          {(currentPage == 'PlantContraindication' && <PropertyList filter={'PlantContraindication'} filterText={filterText}/>)}
+          {(currentPage == 'PlantEffect' && <PropertyList filter={'PlantEffect'} filterText={filterText}/>)}
+          {(currentPage == 'PlantNegativeEffect' && <PropertyList filter={'PlantNegativeEffect'} filterText={filterText}/>)}
+          {(currentPage == 'PlantIndication' && <PropertyList filter={'PlantIndication'} filterText={filterText}/>)}
+
+
           {( currentPage == 'home' &&
            <ElementList filter={filter} filterText={filterText} originList = {originList} divisionList = {plantDivisionList} vegetableReignList = {vegetableReignList} plantClassList = {plantClassList}
                         plantFamilyList = {plantFamilyList} plantGenreList = {plantGenreList} plantSpeciesList = {plantSpeciesList} plantPartList = {plantPartList}/>)}

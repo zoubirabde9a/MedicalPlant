@@ -162,3 +162,38 @@ code {
   padding: 15px 30px;
   font-size: 20px;
 }
+
+
+
+.deleteButton {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 12px;
+  border-radius: 8px;
+  background-color: #FF0000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #FF56b3;
+}
+
+.deleteButton:active {
+  background-color: #FF3380;
+}
+
+.deleteButton:focus {
+  outline: none;
+}
+
+/* Optional: Adjust the size of the button */
+.deleteButton.large {
+  padding: 15px 30px;
+  font-size: 20px;
+}

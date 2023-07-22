@@ -213,7 +213,7 @@ public class PlantController : Controller
     [Route("AddContraindication")]
     public async Task<ActionResult<Plant>> AddContraindication(string name)
     {
-        var newObject = Context.PlantContraindicationData.Add(new PlantContraindication { Name = name }).Entity;
+        var newObject = Context.PlantContraindicationData.Add(new PlantContraindication { LatinName = name }).Entity;
         await Context.SaveChangesAsync();
         return Ok(Json(newObject).Value);
     }

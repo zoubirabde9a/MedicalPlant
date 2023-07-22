@@ -2,6 +2,7 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MedicalPlant.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230722085002_update34")]
+    partial class update34
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,45 +95,6 @@ namespace MedicalPlant.Migrations
                     b.ToTable("PlantClassData");
                 });
 
-            modelBuilder.Entity("Model.PlantConstituent", b =>
-                {
-                    b.Property<long>("PlantConstituentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantConstituentId"));
-
-                    b.Property<string>("LatinName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Removed")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("PlantConstituentId");
-
-                    b.ToTable("PlantConstituentData");
-                });
-
-            modelBuilder.Entity("Model.PlantConstituentEntry", b =>
-                {
-                    b.Property<long>("PlantConstituentEntryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantConstituentEntryId"));
-
-                    b.Property<long>("PlantConstituentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PlantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PlantConstituentEntryId");
-
-                    b.ToTable("PlantConstituentEntryData");
-                });
-
             modelBuilder.Entity("Model.PlantContraindication", b =>
                 {
                     b.Property<long>("PlantContraindicationId")
@@ -140,7 +103,7 @@ namespace MedicalPlant.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantContraindicationId"));
 
-                    b.Property<string>("LatinName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -191,45 +154,6 @@ namespace MedicalPlant.Migrations
                     b.ToTable("PlantDivisionData");
                 });
 
-            modelBuilder.Entity("Model.PlantEffect", b =>
-                {
-                    b.Property<long>("PlantEffectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantEffectId"));
-
-                    b.Property<string>("LatinName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Removed")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("PlantEffectId");
-
-                    b.ToTable("PlantEffectData");
-                });
-
-            modelBuilder.Entity("Model.PlantEffectEntry", b =>
-                {
-                    b.Property<long>("PlantEffectEntryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantEffectEntryId"));
-
-                    b.Property<long>("PlantEffectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PlantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PlantEffectEntryId");
-
-                    b.ToTable("PlantEffectEntryData");
-                });
-
             modelBuilder.Entity("Model.PlantFamily", b =>
                 {
                     b.Property<long>("PlantFamilyId")
@@ -268,84 +192,6 @@ namespace MedicalPlant.Migrations
                     b.HasKey("PlantGenreId");
 
                     b.ToTable("PlantGenreData");
-                });
-
-            modelBuilder.Entity("Model.PlantIndication", b =>
-                {
-                    b.Property<long>("PlantIndicationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantIndicationId"));
-
-                    b.Property<string>("LatinName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Removed")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("PlantIndicationId");
-
-                    b.ToTable("PlantIndicationData");
-                });
-
-            modelBuilder.Entity("Model.PlantIndicationEntry", b =>
-                {
-                    b.Property<long>("PlantIndicationEntryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantIndicationEntryId"));
-
-                    b.Property<long>("PlantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PlantIndicationId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PlantIndicationEntryId");
-
-                    b.ToTable("PlantIndicationEntryData");
-                });
-
-            modelBuilder.Entity("Model.PlantNegativeEffect", b =>
-                {
-                    b.Property<long>("PlantNegativeEffectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantNegativeEffectId"));
-
-                    b.Property<string>("LatinName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Removed")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("PlantNegativeEffectId");
-
-                    b.ToTable("PlantNegativeEffectData");
-                });
-
-            modelBuilder.Entity("Model.PlantNegativeEffectEntry", b =>
-                {
-                    b.Property<long>("PlantNegativeEffectEntryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PlantNegativeEffectEntryId"));
-
-                    b.Property<long>("PlantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PlantNegativeEffectId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PlantNegativeEffectEntryId");
-
-                    b.ToTable("PlantNegativeEffectEntryData");
                 });
 
             modelBuilder.Entity("Model.PlantOrigin", b =>
