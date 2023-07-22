@@ -70,6 +70,31 @@ const TaskBar = (props) => {
         setCurrentPage('plantPart')
     }
 
+    const handlePlantConstituentListSubmit = () =>
+    {
+        setCurrentPage('PlantConstituent')
+    }
+
+    const handlePlantContraindicationListSubmit = () =>
+    {
+        setCurrentPage('PlantContraindication')
+    }
+
+    const handlePlantEffectListSubmit = () =>
+    {
+        setCurrentPage('PlantEffect')
+    }
+
+    const handlePlantNegativeEffectListSubmit = () =>
+    {
+        setCurrentPage('PlantNegativeEffect')
+    }
+
+    const handlePlantIndicationListSubmit = () =>
+    {
+        setCurrentPage('PlantIndication')
+    }
+
     return (
         <StyledAppBar position="static">
             <Toolbar>
@@ -83,6 +108,13 @@ const TaskBar = (props) => {
                 <StyledButton onClick={handleGenreListSubmit} color="inherit">Liste Genre</StyledButton>
                 <StyledButton onClick={handlePlantSpeciesListSubmit} color="inherit">Liste Èspece</StyledButton>
                 <StyledButton onClick={handlePlantPartListSubmit} color="inherit">Liste Partie Utilisee</StyledButton>
+
+
+                <StyledButton onClick={handlePlantConstituentListSubmit} color="inherit">Liste Constituents</StyledButton>
+                <StyledButton onClick={handlePlantContraindicationListSubmit} color="inherit">Liste Contre Indications</StyledButton>
+                <StyledButton onClick={handlePlantEffectListSubmit} color="inherit">Liste Effects</StyledButton>
+                <StyledButton onClick={handlePlantNegativeEffectListSubmit} color="inherit">Liste Effects Indesirables</StyledButton>
+                <StyledButton onClick={handlePlantIndicationListSubmit} color="inherit">Liste Indications</StyledButton>
             </Toolbar>
         </StyledAppBar>
     );

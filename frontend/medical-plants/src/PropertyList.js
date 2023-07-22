@@ -10,12 +10,13 @@ import AddPlantFamily from "./AddPlantFamily";
 import AddPlantGenre from "./AddPlantGenre";
 import AddPlantSpecies from "./AddPlantSpecies";
 import AddPlantUsedPart from "./AddPlantUsedPart";
+import AddPlantProperty from "./AddPlantProperty";
 
 const PropertyList = ({filter, filterText}) => {
     const elements = [];
     const [showModal, setShowModal] = useState(false)
     const [data, setData] = useState([]);
-
+    const [refresh, setRefresh] = useState(false);
     const [pageSize, setPageSize] = useState(500);
     const [pageOffset, setPageOffset] = useState(0);
 
@@ -48,6 +49,22 @@ const PropertyList = ({filter, filterText}) => {
                 case 'PlantPart':
                     path = `http://localhost:5202/api/PlantPart/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
                     break;
+
+                case 'PlantConstituent':
+                    path = `http://localhost:5202/api/PlantConstituent/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+                    break;
+                case 'PlantContraindication':
+                    path = `http://localhost:5202/api/PlantContraindication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+                    break;
+                case 'PlantEffect':
+                    path = `http://localhost:5202/api/PlantEffect/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+                    break;
+                case 'PlantNegativeEffect':
+                    path = `http://localhost:5202/api/PlantNegativeEffect/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+                    break;
+                case 'PlantIndication':
+                    path = `http://localhost:5202/api/PlantIndication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+                    break;
             }
         }
         fetch(path)
@@ -56,13 +73,55 @@ const PropertyList = ({filter, filterText}) => {
                 setData(data)
             })
             .catch(error => console.log(error));
-    }, [filter, filterText, showModal]);
+    }, [filter, filterText, showModal, refresh]);
 
+    console.log(data);
     data.map((item) =>
     {
         var properties = [];
         properties.push( { name: 'Nom Commun', value: item.latinName })
-        elements.push({text: item.latinName, properties: properties})
+        switch (filter) {
+            case 'PlantOrigin':
+                elements.push({text: item.latinName, properties: properties, id : item.plantOriginId})
+                break;
+            case 'VegetableReign':
+                elements.push({text: item.latinName, properties: properties, id : item.vegetableReignId})
+                break;
+            case 'PlantDivision':
+                elements.push({text: item.latinName, properties: properties, id : item.plantDivisionId})
+                break;
+            case 'PlantClass':
+                elements.push({text: item.latinName, properties: properties, id : item.plantClassId})
+                break;
+            case 'PlantFamily':
+                elements.push({text: item.latinName, properties: properties, id : item.plantFamilyId})
+                break;
+            case 'PlantGenre':
+                elements.push({text: item.latinName, properties: properties, id : item.plantGenreId})
+                break;
+            case 'PlantSpecies':
+                elements.push({text: item.latinName, properties: properties, id : item.plantSpeciesId})
+                break;
+            case 'PlantPart':
+                elements.push({text: item.latinName, properties: properties, id : item.plantPartId})
+                break;
+
+            case 'PlantConstituent':
+                elements.push({text: item.latinName, properties: properties, id : item.plantConstituentId})
+                break;
+            case 'PlantContraindication':
+                elements.push({text: item.latinName, properties: properties, id : item.plantContraindicationId})
+                break;
+            case 'PlantEffect':
+                elements.push({text: item.latinName, properties: properties, id : item.plantEffectId})
+                break;
+            case 'PlantNegativeEffect':
+                elements.push({text: item.latinName, properties: properties, id : item.plantPartId})
+                break;
+            case 'PlantIndication':
+                elements.push({text: item.latinName, properties: properties, id : item.plantNegativeEffectId})
+                break;
+        }
     })
 
     const handleAddPressed = (e) =>
@@ -75,29 +134,9 @@ const PropertyList = ({filter, filterText}) => {
             <button className='modifyButton' onClick={handleAddPressed}>Ajouter</button>
 
             {
-                (filter == 'PlantOrigin' && showModal && <AddPlantOrigin showModal = {showModal} setShowModal={setShowModal}/>)
+                (showModal && <AddPlantProperty property={filter} showModal = {showModal} setShowModal={setShowModal}/>)
             }
-            {
-                (filter == 'VegetableReign' && showModal && <AddPlantVegetableReign showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantDivision' && showModal && <AddPlantDivision showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantClass' && showModal && <AddPlantClass showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantFamily' && showModal && <AddPlantFamily showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantGenre' && showModal && <AddPlantGenre showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantSpecies' && showModal && <AddPlantSpecies showModal = {showModal} setShowModal={setShowModal}/>)
-            }
-            {
-                (filter == 'PlantPart' && showModal && <AddPlantUsedPart showModal = {showModal} setShowModal={setShowModal}/>)
-            }
+
 
         <div className="element-list">
             {elements.map((element, index) => (
@@ -105,6 +144,10 @@ const PropertyList = ({filter, filterText}) => {
                     key={index}
                     properties={element.properties}
                     text={element.text}
+                    setRefresh = {setRefresh}
+                    refresh={refresh}
+                    property={filter}
+                    propertyId={element.id}
                 />
             ))}
         </div>
