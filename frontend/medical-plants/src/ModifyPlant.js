@@ -3,7 +3,8 @@ import ErrorComponent from "./ErrorComponent";
 
 const ModifyPlant = (props) => {
 
-    const {showModal, setRefresh, setShowModal, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList, plantGenreList, plantSpeciesList, plantPartList, plantId, setPlantId} = props;
+    const {showModal, setRefresh, setShowModal, originList, divisionList, vegetableReignList, plantClassList, plantFamilyList,
+        plantGenreList, plantSpeciesList, plantPartList, plantId, setPlantId} = props;
 
     const [errorMessage, setErrorMessage] = useState('');
     const [latinName, setLatinName] = useState('');

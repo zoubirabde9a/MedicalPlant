@@ -18,21 +18,6 @@ const FormPlant = (props) => {
 
     console.log("iteme data : " + props.itemData);
     var plantId = props.itemData.plantId
-   /* const queryParams = new URLSearchParams();
-    // queryParams.append("plantId", plantId);
-    queryParams.append("latinName", values.latinName);
-    queryParams.append("commonName", values.commonName);
-    queryParams.append("arabicName", values.arabicName);
-    // queryParams.append("plantOriginId", values.originId);
-    // queryParams.append("plantDivisionId", values.ivisionId);
-    // queryParams.append("plantVegetableReignId", values.vegetableReignId);
-    // queryParams.append("plantClassId", values.classId);
-    // queryParams.append("plantFamilyId", values.familyId);
-    // queryParams.append("plantGenreId", values.genreId);
-    // queryParams.append("plantSpeciesId", values.speciesId);
-    // queryParams.append("plantPartId", values.usedPartId);
-    const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;*/
-
 
 
     if (plantId != -1) {
@@ -71,18 +56,6 @@ const FormPlant = (props) => {
       console.log("ERRROROROROROROROROR");
     }
 
-    /*fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data: success ", data);
-        plantId = data.plantId;
-      })
-      .catch((error) => console.error("Error:", error));*/
     props.modalHandler(false);
   };
 
@@ -155,7 +128,6 @@ const FormPlant = (props) => {
       .catch((error) => console.log(error));
   }, []);
 
-  console.log("item ", props?.itemData?.commonName);
   return props.showModal ? (
     <Modal title="Ajouter une nouvelle plante" open={props.showModal} onOk={closeModal} onCancel={closeModal}>
       <Form
@@ -234,7 +206,7 @@ const FormPlant = (props) => {
         <Form.Item
           label="Origin"
           name="originId"
-          initialValue={props?.itemData?.plantOriginId ?? null}
+          initialValue={props?.itemData?.origin?.plantOriginId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -251,6 +223,7 @@ const FormPlant = (props) => {
         <Form.Item
           label="Division"
           name="plantDivisionId"
+          initialValue={props?.itemData?.plantDivision?.plantDivisionId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -268,6 +241,7 @@ const FormPlant = (props) => {
         <Form.Item
           label="Régne"
           name="vegetableReignId"
+          initialValue={props?.itemData?.vegetableReign?.vegetableReignId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -284,6 +258,7 @@ const FormPlant = (props) => {
         <Form.Item
           label="Classe"
           name="plantClassId"
+          initialValue={props?.itemData?.plantClass?.plantClassId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -301,6 +276,7 @@ const FormPlant = (props) => {
         <Form.Item
           label="Famille"
           name="plantFamilyId"
+          initialValue={props?.itemData?.plantFamily?.plantFamilyId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -318,6 +294,8 @@ const FormPlant = (props) => {
         <Form.Item
           label="Genre"
           name="plantGenreId"
+
+          initialValue={props?.itemData?.plantGenre?.plantGenreId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -334,6 +312,8 @@ const FormPlant = (props) => {
         <Form.Item
           label="Éspece"
           name="plantSpeciesId"
+
+          initialValue={props?.itemData?.plantSpecies?.plantSpeciesId ?? null}
           // rules={[
           //   {
           //     required: true,
@@ -351,6 +331,8 @@ const FormPlant = (props) => {
         <Form.Item
           label="Partie Utilise"
           name="usedPartId"
+
+          initialValue={props?.itemData?.usedPart?.plantPartId ?? null}
           // rules={[
           //   {
           //     required: true,
