@@ -143,6 +143,27 @@ const Datatable = (props) => {
 
   const onDelete = (record)=>{
     console.log('eeeeeeeeeeee ',record);
+
+    const queryParams = new URLSearchParams();
+    queryParams.append("plantId", record.plantId);
+
+    const url = `http://localhost:5202/api/Plant/Remove?${queryParams.toString()}`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+        .then((response) => {
+          response.json().then((data) => {
+            console.log("hamdoulah ");
+            console.log("data : " + data.error);
+            props.fetchData();
+            props.modalHandler(false);
+          })
+              .catch((error) => console.log(error));
+
+        })
   }
 
   useEffect(() => {

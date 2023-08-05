@@ -53,6 +53,33 @@ const ReferenceContainer = () => {
       name: "PlantPart",
       label: "Partie Utilisée",
     },
+
+
+    {
+      key: "8",
+      name: "PlantConstituent",
+      label: "Constituents",
+    },
+    {
+      key: "9",
+      name: "PlantContraindication",
+      label: "Contre Indications",
+    },
+    {
+      key: "10",
+      name: "PlantEffect",
+      label: "Effects",
+    },
+    {
+      key: "11",
+      name: "PlantNegativeEffect",
+      label: "Effects Négatives",
+    },
+    {
+      key: "12",
+      name: "PlantIndication",
+      label: "Indications",
+    },
   ];
 
   const [reference, setReference] = useState(listReference[0]);

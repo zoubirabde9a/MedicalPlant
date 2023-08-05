@@ -15,8 +15,10 @@ const FormPlant = (props) => {
 
   const onFinish = async (values) => {
     console.log("onFinish: ", values);
-    var plantId = -1;
-    const queryParams = new URLSearchParams();
+
+    console.log("iteme data : " + props.itemData);
+    var plantId = props.itemData.plantId
+   /* const queryParams = new URLSearchParams();
     // queryParams.append("plantId", plantId);
     queryParams.append("latinName", values.latinName);
     queryParams.append("commonName", values.commonName);
@@ -29,9 +31,47 @@ const FormPlant = (props) => {
     // queryParams.append("plantGenreId", values.genreId);
     // queryParams.append("plantSpeciesId", values.speciesId);
     // queryParams.append("plantPartId", values.usedPartId);
-    const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;
+    const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;*/
 
-    fetch(url, {
+
+
+    if (plantId != -1) {
+      const queryParams = new URLSearchParams();
+      queryParams.append("plantId", plantId);
+      queryParams.append("latinName", values.latinName);
+      queryParams.append("commonName", values.commonName);
+      queryParams.append("arabicName", values.arabicName);
+      queryParams.append("plantOriginId", values.originId);
+      queryParams.append("plantDivisionId", values.plantDivisionId);
+      queryParams.append("plantVegetableReignId", values.vegetableReignId);
+      queryParams.append("plantClassId", values.plantClassId);
+      queryParams.append("plantFamilyId", values.plantFamilyId);
+      queryParams.append("plantGenreId", values.plantGenreId);
+      queryParams.append("plantSpeciesId", values.plantSpeciesId);
+      queryParams.append("plantPartId", values.usedPartId);
+      const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+          .then((response) => {
+            response.json().then((data) => {
+              console.log("hamdoulah ");
+              console.log("data : " + data.error);
+              props.fetchData();
+              props.modalHandler(false);
+            })
+            .catch((error) => console.log(error));
+
+          })
+
+    } else {
+      console.log("ERRROROROROROROROROR");
+    }
+
+    /*fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,39 +81,8 @@ const FormPlant = (props) => {
       .then((data) => {
         console.log("data: success ", data);
         plantId = data.plantId;
-        if (plantId != -1) {
-          const queryParams = new URLSearchParams();
-          queryParams.append("plantId", plantId);
-          queryParams.append("latinName", values.latinName);
-          queryParams.append("commonName", values.commonName);
-          queryParams.append("arabicName", values.arabicName);
-          queryParams.append("plantOriginId", values.originId);
-          queryParams.append("plantDivisionId", values.plantDivisionId);
-          queryParams.append("plantVegetableReignId", values.vegetableReignId);
-          queryParams.append("plantClassId", values.plantClassId);
-          queryParams.append("plantFamilyId", values.plantFamilyId);
-          queryParams.append("plantGenreId", values.plantGenreId);
-          queryParams.append("plantSpeciesId", values.plantSpeciesId);
-          queryParams.append("plantPartId", values.usedPartId);
-          const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("hamdoulah ");
-              props.fetchData();
-              props.modalHandler(false);
-            })
-            .catch((error) => console.log(error));
-        } else {
-          console.log("ERRROROROROROROROROR");
-        }
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => console.error("Error:", error));*/
     props.modalHandler(false);
   };
 
