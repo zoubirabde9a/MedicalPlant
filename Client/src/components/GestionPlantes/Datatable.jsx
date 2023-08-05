@@ -90,13 +90,13 @@ const Datatable = (props) => {
       dataIndex: "action",
       key: "action",
       align: "center",
-      render: (text,record,index) => {
+      render: () => {
         return (
           <>
-            <Button color="blue" key="0" onClick={(e)=>onEdit(record)}>
+            <Button color="blue" key="0">
               Modifier
             </Button>
-            <Button color="blue" key="1" onClick={(e)=>onDelete(record)}>
+            <Button color="blue" key="1">
               Supprimer
             </Button>
           </>
@@ -134,37 +134,6 @@ const Datatable = (props) => {
     //   ),
     // },
   ];
-
-  const onEdit = (record)=>{
-    console.log('eeeeeeeeeeee ',record);
-    props.setItemData(record)
-    props.modalHandler(true)
-  }
-
-  const onDelete = (record)=>{
-    console.log('eeeeeeeeeeee ',record);
-
-    const queryParams = new URLSearchParams();
-    queryParams.append("plantId", record.plantId);
-
-    const url = `http://localhost:5202/api/Plant/Remove?${queryParams.toString()}`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-        .then((response) => {
-          response.json().then((data) => {
-            console.log("hamdoulah ");
-            console.log("data : " + data.error);
-            props.fetchData();
-            props.modalHandler(false);
-          })
-              .catch((error) => console.log(error));
-
-        })
-  }
 
   useEffect(() => {
     props.fetchData();

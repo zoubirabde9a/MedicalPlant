@@ -7,9 +7,8 @@ import { Content } from "antd/es/layout/layout";
 const PlantContainer = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchData, setSearchData] = useState(null);
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState(null);
   const [tableData, setTableData] = useState(null);
-  const [itemData, setItemData] = useState(null);
 
   const modalHandler = (entry) => setShowModal(entry);
 
@@ -59,9 +58,8 @@ const PlantContainer = () => {
       .catch((error) => console.log(error));
   };
 
-  console.log("filterText : " + filterText);
   const fetchData = () => {
-    fetch(`http://localhost:5202/api/Plant/GetAllByLatinName?offset=0&limit=99999&latinNameLike=` + filterText)
+    fetch("http://localhost:5202/api/Plant/GetAll?offset=0&limit=20")
       .then((response) => response.json())
       .then((data) => {
         console.log("tableData ", data);
@@ -72,7 +70,6 @@ const PlantContainer = () => {
 
   useEffect(() => {
     searchFunction();
-    fetchData();
   }, [filterText]);
 
   return (
@@ -105,8 +102,8 @@ const PlantContainer = () => {
         placeholder="Recherche"
       />
 
-      <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} setItemData={setItemData} itemData={itemData}/>
-      <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData}/>
+      <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} />
+      <Datatable fetchData={fetchData} tableData={tableData}/>
     </Content>
   );
 };

@@ -1,24 +1,22 @@
 import { Button, Checkbox, Form, Input, List, Modal, Select } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const FormPlant = (props) => {
   const [originList, setOriginList] = useState([]);
   const [vegetableReignList, setVegetableReignList] = useState([]);
   const [plantDivisionList, setPlantDivisionList] = useState([]);
+
   const [plantClassList, setPlantClass] = useState([]);
   const [plantFamilyList, setPlantFamily] = useState([]);
   const [plantGenreList, setPlantGenre] = useState([]);
   const [plantSpeciesList, setPlantSpecies] = useState([]);
   const [plantPartList, setPlantPart] = useState([]);
 
-  const formRef = useRef(null);
-
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     console.log("onFinish: ", values);
+    var plantId = -1;
 
-    console.log("iteme data : " + props.itemData);
-    var plantId = props.itemData.plantId
-   /* const queryParams = new URLSearchParams();
+    const queryParams = new URLSearchParams();
     // queryParams.append("plantId", plantId);
     queryParams.append("latinName", values.latinName);
     queryParams.append("commonName", values.commonName);
@@ -31,47 +29,9 @@ const FormPlant = (props) => {
     // queryParams.append("plantGenreId", values.genreId);
     // queryParams.append("plantSpeciesId", values.speciesId);
     // queryParams.append("plantPartId", values.usedPartId);
-    const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;*/
+    const url = `http://localhost:5202/api/Plant/Add?${queryParams.toString()}`;
 
-
-
-    if (plantId != -1) {
-      const queryParams = new URLSearchParams();
-      queryParams.append("plantId", plantId);
-      queryParams.append("latinName", values.latinName);
-      queryParams.append("commonName", values.commonName);
-      queryParams.append("arabicName", values.arabicName);
-      queryParams.append("plantOriginId", values.originId);
-      queryParams.append("plantDivisionId", values.plantDivisionId);
-      queryParams.append("plantVegetableReignId", values.vegetableReignId);
-      queryParams.append("plantClassId", values.plantClassId);
-      queryParams.append("plantFamilyId", values.plantFamilyId);
-      queryParams.append("plantGenreId", values.plantGenreId);
-      queryParams.append("plantSpeciesId", values.plantSpeciesId);
-      queryParams.append("plantPartId", values.usedPartId);
-      const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-          .then((response) => {
-            response.json().then((data) => {
-              console.log("hamdoulah ");
-              console.log("data : " + data.error);
-              props.fetchData();
-              props.modalHandler(false);
-            })
-            .catch((error) => console.log(error));
-
-          })
-
-    } else {
-      console.log("ERRROROROROROROROROR");
-    }
-
-    /*fetch(url, {
+    fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,19 +41,48 @@ const FormPlant = (props) => {
       .then((data) => {
         console.log("data: success ", data);
         plantId = data.plantId;
+        if (plantId != -1) {
+          const queryParams = new URLSearchParams();
+          queryParams.append("plantId", plantId);
+          queryParams.append("latinName", values.latinName);
+          queryParams.append("commonName", values.commonName);
+          queryParams.append("arabicName", values.arabicName);
+          queryParams.append("plantOriginId", values.originId);
+          queryParams.append("plantDivisionId", values.plantDivisionId);
+          queryParams.append("plantVegetableReignId", values.vegetableReignId);
+          queryParams.append("plantClassId", values.plantClassId);
+          queryParams.append("plantFamilyId", values.plantFamilyId);
+          queryParams.append("plantGenreId", values.plantGenreId);
+          queryParams.append("plantSpeciesId", values.plantSpeciesId);
+          queryParams.append("plantPartId", values.usedPartId);
+          const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("hamdoulah ");
+              props.fetchData();
+              props.modalHandler(false);
+            })
+            .catch((error) => console.log(error));
+        } else {
+          console.log("ERRROROROROROROROROR");
+        }
       })
-      .catch((error) => console.error("Error:", error));*/
+      .catch((error) => console.error("Error:", error));
     props.modalHandler(false);
   };
 
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log("Failed:", errorInfo);
-  //   props.modalHandler(false);
-  // };
-  const closeModal = () => {
-    formRef.current.resetFields();
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
     props.modalHandler(false);
-    props.setItemData(null);
+  };
+  const closeModal = () => {
+    props.modalHandler(false);
   };
 
   useEffect(() => {
@@ -154,9 +143,7 @@ const FormPlant = (props) => {
       })
       .catch((error) => console.log(error));
   }, []);
-
-  console.log("item ", props?.itemData?.commonName);
-  return props.showModal ? (
+  return (
     <Modal title="Ajouter une nouvelle plante" open={props.showModal} onOk={closeModal} onCancel={closeModal}>
       <Form
         name="basic"
@@ -169,36 +156,22 @@ const FormPlant = (props) => {
         style={{
           maxWidth: 600,
         }}
-        // initialValues={null}
-        ref={formRef}
+        initialValues={{
+          remember: true,
+        }}
         onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         // autoComplete="off"
       >
         <Form.Item
-          label="plantId"
-          name="plantId"
-          initialValue={props?.itemData?.plantId ?? null}
-          style={{ display: "none" }}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           label="Nom Commun"
           name="commonName"
-          initialValue={props?.itemData?.commonName ?? null}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -206,13 +179,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Nom Latin"
           name="latinName"
-          initialValue={props?.itemData?.latinName ?? null}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your Nom Latin",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your Nom Latin",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -220,13 +192,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Nom Arabe"
           name="arabicName"
-          initialValue={props?.itemData?.arabicName ?? null}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your username!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -234,13 +205,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Origin"
           name="originId"
-          initialValue={props?.itemData?.plantOriginId ?? null}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {originList.map((element) => (
@@ -251,12 +221,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Division"
           name="plantDivisionId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your username!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantDivisionList.map((element) => (
@@ -268,12 +238,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Régne"
           name="vegetableReignId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {vegetableReignList.map((element) => (
@@ -284,12 +254,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Classe"
           name="plantClassId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your username!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantClassList.map((element) => (
@@ -301,12 +271,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Famille"
           name="plantFamilyId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your username!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantFamilyList.map((element) => (
@@ -318,12 +288,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Genre"
           name="plantGenreId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantGenreList.map((element) => (
@@ -334,12 +304,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Éspece"
           name="plantSpeciesId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your username!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantSpeciesList.map((element) => (
@@ -351,12 +321,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Partie Utilise"
           name="usedPartId"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please input your password!",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
         >
           <Select placeholder="Select a option..">
             {plantPartList.map((element) => (
@@ -387,6 +357,6 @@ const FormPlant = (props) => {
         </Form.Item>
       </Form>
     </Modal>
-  ) : null;
+  );
 };
 export default FormPlant;
