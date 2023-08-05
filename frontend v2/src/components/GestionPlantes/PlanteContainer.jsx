@@ -9,6 +9,7 @@ const PlantContainer = () => {
   const [searchData, setSearchData] = useState(null);
   const [filterText, setFilterText] = useState(null);
   const [tableData, setTableData] = useState(null);
+  const [itemData, setItemData] = useState(null);
 
   const modalHandler = (entry) => setShowModal(entry);
 
@@ -102,8 +103,8 @@ const PlantContainer = () => {
         placeholder="Recherche"
       />
 
-      <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} />
-      <Datatable fetchData={fetchData} tableData={tableData}/>
+      <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} setItemData={setItemData} itemData={itemData}/>
+      <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData}/>
     </Content>
   );
 };

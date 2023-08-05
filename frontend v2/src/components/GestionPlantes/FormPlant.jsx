@@ -1,21 +1,21 @@
 import { Button, Checkbox, Form, Input, List, Modal, Select } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const FormPlant = (props) => {
   const [originList, setOriginList] = useState([]);
   const [vegetableReignList, setVegetableReignList] = useState([]);
   const [plantDivisionList, setPlantDivisionList] = useState([]);
-
   const [plantClassList, setPlantClass] = useState([]);
   const [plantFamilyList, setPlantFamily] = useState([]);
   const [plantGenreList, setPlantGenre] = useState([]);
   const [plantSpeciesList, setPlantSpecies] = useState([]);
   const [plantPartList, setPlantPart] = useState([]);
 
-  const onFinish = (values) => {
+  const formRef = useRef(null);
+
+  const onFinish = async (values) => {
     console.log("onFinish: ", values);
     var plantId = -1;
-
     const queryParams = new URLSearchParams();
     // queryParams.append("plantId", plantId);
     queryParams.append("latinName", values.latinName);
@@ -77,12 +77,14 @@ const FormPlant = (props) => {
     props.modalHandler(false);
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    props.modalHandler(false);
-  };
+  // const onFinishFailed = (errorInfo) => {
+  //   console.log("Failed:", errorInfo);
+  //   props.modalHandler(false);
+  // };
   const closeModal = () => {
+    formRef.current.resetFields();
     props.modalHandler(false);
+    props.setItemData(null);
   };
 
   useEffect(() => {
@@ -143,7 +145,9 @@ const FormPlant = (props) => {
       })
       .catch((error) => console.log(error));
   }, []);
-  return (
+
+  console.log("item ", props?.itemData?.commonName);
+  return props.showModal ? (
     <Modal title="Ajouter une nouvelle plante" open={props.showModal} onOk={closeModal} onCancel={closeModal}>
       <Form
         name="basic"
@@ -156,22 +160,36 @@ const FormPlant = (props) => {
         style={{
           maxWidth: 600,
         }}
-        initialValues={{
-          remember: true,
-        }}
+        // initialValues={null}
+        ref={formRef}
         onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         // autoComplete="off"
       >
         <Form.Item
+          label="plantId"
+          name="plantId"
+          initialValue={props?.itemData?.plantId ?? null}
+          style={{ display: "none" }}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
           label="Nom Commun"
           name="commonName"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
+          initialValue={props?.itemData?.commonName ?? null}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
         >
           <Input />
         </Form.Item>
@@ -179,12 +197,13 @@ const FormPlant = (props) => {
         <Form.Item
           label="Nom Latin"
           name="latinName"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Nom Latin",
-            },
-          ]}
+          initialValue={props?.itemData?.latinName ?? null}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your Nom Latin",
+          //   },
+          // ]}
         >
           <Input />
         </Form.Item>
@@ -192,12 +211,13 @@ const FormPlant = (props) => {
         <Form.Item
           label="Nom Arabe"
           name="arabicName"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
+          initialValue={props?.itemData?.arabicName ?? null}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your username!",
+          //   },
+          // ]}
         >
           <Input />
         </Form.Item>
@@ -205,12 +225,13 @@ const FormPlant = (props) => {
         <Form.Item
           label="Origin"
           name="originId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
+          initialValue={props?.itemData?.plantOriginId ?? null}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {originList.map((element) => (
@@ -221,12 +242,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Division"
           name="plantDivisionId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your username!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantDivisionList.map((element) => (
@@ -238,12 +259,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Régne"
           name="vegetableReignId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {vegetableReignList.map((element) => (
@@ -254,12 +275,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Classe"
           name="plantClassId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your username!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantClassList.map((element) => (
@@ -271,12 +292,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Famille"
           name="plantFamilyId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your username!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantFamilyList.map((element) => (
@@ -288,12 +309,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Genre"
           name="plantGenreId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantGenreList.map((element) => (
@@ -304,12 +325,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Éspece"
           name="plantSpeciesId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your username!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantSpeciesList.map((element) => (
@@ -321,12 +342,12 @@ const FormPlant = (props) => {
         <Form.Item
           label="Partie Utilise"
           name="usedPartId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Please input your password!",
+          //   },
+          // ]}
         >
           <Select placeholder="Select a option..">
             {plantPartList.map((element) => (
@@ -357,6 +378,6 @@ const FormPlant = (props) => {
         </Form.Item>
       </Form>
     </Modal>
-  );
+  ) : null;
 };
 export default FormPlant;

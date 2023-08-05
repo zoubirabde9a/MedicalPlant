@@ -90,13 +90,13 @@ const Datatable = (props) => {
       dataIndex: "action",
       key: "action",
       align: "center",
-      render: () => {
+      render: (text,record,index) => {
         return (
           <>
-            <Button color="blue" key="0">
+            <Button color="blue" key="0" onClick={(e)=>onEdit(record)}>
               Modifier
             </Button>
-            <Button color="blue" key="1">
+            <Button color="blue" key="1" onClick={(e)=>onDelete(record)}>
               Supprimer
             </Button>
           </>
@@ -134,6 +134,16 @@ const Datatable = (props) => {
     //   ),
     // },
   ];
+
+  const onEdit = (record)=>{
+    console.log('eeeeeeeeeeee ',record);
+    props.setItemData(record)
+    props.modalHandler(true)
+  }
+
+  const onDelete = (record)=>{
+    console.log('eeeeeeeeeeee ',record);
+  }
 
   useEffect(() => {
     props.fetchData();
