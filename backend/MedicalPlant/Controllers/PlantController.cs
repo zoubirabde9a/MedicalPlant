@@ -131,49 +131,49 @@ public class PlantController : Controller
 
         if (plant == null)
         {
-            new JsonResult(new { error = "Cannot be found!" });  
+            return new JsonResult(new { error = "Cannot be found!" });  
         }
         
-        if (plantOrigin == null)
+        /*if (plantOrigin == null)
         {
-            new JsonResult(new { error = "Origin  cannot be found!" });  
+            return new JsonResult(new { error = "Origin  cannot be found!" });  
         }
         
         if (division == null)
         {
-            new JsonResult(new { error = "DivisionId cannot be found!" });  
+            return new JsonResult(new { error = "DivisionId cannot be found!" });  
         }
         
         if (vegetableReign == null)
         {
-            new JsonResult(new { error = "VegetableReign cannot be found!" });  
+            return new JsonResult(new { error = "VegetableReign cannot be found!" });  
         }
         
         
         if (plantClass == null)
         {
-            new JsonResult(new { error = "plantClass cannot be found!" });  
+            return new JsonResult(new { error = "plantClass cannot be found!" });  
         }
         
         if (plantFamily == null)
         {
-            new JsonResult(new { error = "plantFamily cannot be found!" });  
+            return new JsonResult(new { error = "plantFamily cannot be found!" });  
         }
         
         if (plantGenre == null)
         {
-            new JsonResult(new { error = "plantGenre cannot be found!" });  
+            return new JsonResult(new { error = "plantGenre cannot be found!" });  
         }
         
         if (plantSpecies == null)
         {
-            new JsonResult(new { error = "plantSpecies cannot be found!" });  
+            return new JsonResult(new { error = "plantSpecies cannot be found!" });  
         }
         
         if (plantPart == null)
         {
-            new JsonResult(new { error = "plantPart cannot be found!" });  
-        }
+            return new JsonResult(new { error = "plantPart cannot be found!" });  
+        }*/
 
         plant.LatinName = latinName;
         plant.CommonName = commonName;
@@ -207,15 +207,6 @@ public class PlantController : Controller
         }
         
         return new JsonResult(new { error = "Cannot be found!" });   
-    }
-
-    [HttpPost]
-    [Route("AddContraindication")]
-    public async Task<ActionResult<Plant>> AddContraindication(string name)
-    {
-        var newObject = Context.PlantContraindicationData.Add(new PlantContraindication { LatinName = name }).Entity;
-        await Context.SaveChangesAsync();
-        return Ok(Json(newObject).Value);
     }
 
     [HttpPost]
@@ -260,6 +251,29 @@ public class PlantController : Controller
         await Context.SaveChangesAsync();
         return Ok(Json(newObject).Value);
     }
+    
+    [HttpPost]
+    [Route("RemoveContraindicationEntry")]
+    public async Task<ActionResult<Plant>> RemoveContraindicationEntry(int plantId, int contraindicationId)
+    {
+        var entryList = Context.PlantContraindicationEntryData.Where(entry =>
+            entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
+
+      
+
+        bool alreadyExists = entryList != null && entryList.Count() > 0;
+        
+        if (!alreadyExists)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Entry does not exists!" });
+        }
+        
+        Context.PlantContraindicationEntryData.Remove(entryList.ToList()[0]);
+
+        await Context.SaveChangesAsync();
+        return Ok();
+    }
 
 
     [HttpGet]
@@ -298,7 +312,7 @@ public class PlantController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await PlantData.ToList(await Context.PlantData.Skip(offset).Take(limit).ToListAsync(), Context));
+            return Ok(await PlantData.ToList(await Context.PlantData.Skip(offset).Take(limit).OrderBy(plant => plant.PlantId).ToListAsync(), Context));
         }
         else
         {
