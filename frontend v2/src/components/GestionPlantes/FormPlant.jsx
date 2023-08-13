@@ -11,16 +11,27 @@ const FormPlant = (props) => {
   const [plantSpeciesList, setPlantSpecies] = useState([]);
   const [plantPartList, setPlantPart] = useState([]);
 
+  const [plantConstituent, setPlantConstituent] = useState([]);
+  const [plantContraindication, setPlantContraindication] = useState([]);
+  const [plantEffect, setPlantEffect] = useState([]);
+  const [plantNegativeEffect, setPlantNegativeEffect] = useState([]);
+  const [plantIndication, setPlantIndication] = useState([]);
+
+  const [selectedPlantConstituent, setSelectedPlantConstituent] = useState([]);
+  const [selectedPlantContraindication, setSelectedPlantContraindication] = useState([]);
+  const [selectedPlantEffect, setSelectedPlantEffect] = useState([]);
+  const [selectedPlantNegativeEffect, setSelectedPlantNegativeEffect] = useState([]);
+  const [selectedPlantIndication, setSelectedPlantIndication] = useState([]);
+
   const formRef = useRef(null);
 
   const onFinish = async (values) => {
-    console.log("onFinish: ", values);
-
-    console.log("iteme data : " + props.itemData);
     var plantId = props.itemData.plantId
 
-
     if (plantId != -1) {
+
+      var contraindicationListString = (selectedPlantContraindicationList.join(','))
+
       const queryParams = new URLSearchParams();
       queryParams.append("plantId", plantId);
       queryParams.append("latinName", values.latinName);
@@ -34,7 +45,10 @@ const FormPlant = (props) => {
       queryParams.append("plantGenreId", values.plantGenreId);
       queryParams.append("plantSpeciesId", values.plantSpeciesId);
       queryParams.append("plantPartId", values.usedPartId);
+      queryParams.set("plantContraindicationList", contraindicationListString);
       const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
+      console.log(contraindicationListString)
+      console.log(url)
       fetch(url, {
         method: "POST",
         headers: {
@@ -43,8 +57,6 @@ const FormPlant = (props) => {
       })
           .then((response) => {
             response.json().then((data) => {
-              console.log("hamdoulah ");
-              console.log("data : " + data.error);
               props.fetchData();
               props.modalHandler(false);
             })
@@ -70,6 +82,12 @@ const FormPlant = (props) => {
   };
 
   useEffect(() => {
+    var plantId = props?.itemData?.plantId ?? 0
+    if (plantId == undefined)
+    {
+      plantId = 0
+    }
+
     fetch("http://localhost:5202/api/PlantDivision/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
@@ -126,7 +144,52 @@ const FormPlant = (props) => {
         setPlantPart(data);
       })
       .catch((error) => console.log(error));
+
+
+    fetch("http://localhost:5202/api/PlantContraindication/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("lol : " + data.length)
+          setPlantContraindication(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantContraindication/GetByPlantId?offset=0&limit=9999&plantId=" + plantId)
+        .then((response) => response.json())
+        .then((data) => {
+          setSelectedPlantContraindication(data);
+          console.log("selected list size : " + data.length)
+          data.forEach(element =>
+          {
+            console.log("selected list : " + element.plantContraindicationId)
+            selectedPlantContraindicationList.push(element.plantContraindicationId)
+          });
+        })
+        .catch((error) => console.log(error));
   }, []);
+
+  var plantContraindicationList = [];
+  var selectedPlantContraindicationList = [];
+
+  const handlePlantContraindicationChange = (array) => {
+    selectedPlantContraindicationList = array
+  };
+
+
+
+  plantContraindication.map((element) =>
+  {
+    plantContraindicationList.push({
+      label: element.latinName,
+      value: element.plantContraindicationId,
+    });
+  });
+
+  selectedPlantContraindication.map((element) =>
+  {
+    plantContraindicationList.push(element.latinName);
+  });
+
 
   return props.showModal ? (
     <Modal title="Ajouter une nouvelle plante" open={props.showModal} onOk={closeModal} onCancel={closeModal}>
@@ -346,6 +409,42 @@ const FormPlant = (props) => {
             ))}
           </Select>
         </Form.Item>
+
+
+
+
+
+
+
+
+
+
+        <Form.Item
+            label="Contre Indication"
+            name="contraindications"
+
+            initialValue={selectedPlantContraindicationList}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please input your password!",
+            //   },
+            // ]}
+        >
+
+            <Select
+                mode="multiple"
+                allowClear
+                style={{
+                  width: '100%',
+                }}
+                placeholder="Please select"
+                onChange={handlePlantContraindicationChange}
+                options = {plantContraindicationList}
+            />
+
+        </Form.Item>
+
         {/* <Form.Item
           name="remember"
           valuePropName="checked"

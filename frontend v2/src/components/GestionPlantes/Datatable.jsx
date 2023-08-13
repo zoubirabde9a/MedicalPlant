@@ -85,6 +85,59 @@ const Datatable = (props) => {
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
+
+
+
+
+
+
+
+
+
+
+    {
+      title: "usedPart",
+      dataIndex: "usedPart",
+      key: "usedPart",
+      align: "center",
+      render: (item) => <a>{item.latinName}</a>,
+    },
+    {
+      title: "usedPart",
+      dataIndex: "usedPart",
+      key: "usedPart",
+      align: "center",
+      render: (item) => <a>{item.latinName}</a>,
+    },
+    {
+      title: "usedPart",
+      dataIndex: "usedPart",
+      key: "usedPart",
+      align: "center",
+      render: (item) => <a>{item.latinName}</a>,
+    },
+    {
+      title: "usedPart",
+      dataIndex: "usedPart",
+      key: "usedPart",
+      align: "center",
+      render: (item) => <a>{item.latinName}</a>,
+    },
+    {
+      title: "usedPart",
+      dataIndex: "usedPart",
+      key: "usedPart",
+      align: "center",
+      render: (item) => <a>{item.latinName}</a>,
+    },
+
+
+
+
+
+
+
+
     {
       title: "Action",
       dataIndex: "action",

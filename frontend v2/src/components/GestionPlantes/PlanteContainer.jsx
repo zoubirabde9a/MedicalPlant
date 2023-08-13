@@ -3,15 +3,18 @@ import FormPlant from "./FormPlant";
 import Datatable from "./Datatable";
 import { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
+import PropertySelector from "./PropertySelector.jsx";
 
 const PlantContainer = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showPropertySelector, setShowPropertySelector] = useState(false);
   const [searchData, setSearchData] = useState(null);
   const [filterText, setFilterText] = useState("");
   const [tableData, setTableData] = useState(null);
   const [itemData, setItemData] = useState(null);
 
   const modalHandler = (entry) => setShowModal(entry);
+  const propertySelectorHandler = (entry) => setShowPropertySelector(entry);
 
   const searchHandler = (e) => {
     console.log("search ", e);
@@ -106,6 +109,7 @@ const PlantContainer = () => {
       />
 
       <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} setItemData={setItemData} itemData={itemData}/>
+      <PropertySelector showPropertySelector={showPropertySelector} propertySelectorHandler={propertySelectorHandler}/>
       <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData}/>
     </Content>
   );
