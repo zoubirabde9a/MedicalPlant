@@ -17,11 +17,13 @@ const FormPlant = (props) => {
   const [plantNegativeEffect, setPlantNegativeEffect] = useState([]);
   const [plantIndication, setPlantIndication] = useState([]);
 
-  const [selectedPlantConstituent, setSelectedPlantConstituent] = useState([]);
-  const [selectedPlantContraindication, setSelectedPlantContraindication] = useState([]);
-  const [selectedPlantEffect, setSelectedPlantEffect] = useState([]);
-  const [selectedPlantNegativeEffect, setSelectedPlantNegativeEffect] = useState([]);
-  const [selectedPlantIndication, setSelectedPlantIndication] = useState([]);
+
+
+  const [selectedPlantContraindicationList, setSelectedPlantContraindicationList] = useState([])
+  const [selectedPlantConstituentList, setSelectedPlantConstituentList] = useState([])
+  const [selectedPlantEffectList, setSelectedPlantEffectList] = useState([])
+  const [selectedPlantNegativeEffectList, setSelectedPlantNegativeEffectList] = useState([])
+  const [selectedPlantIndicationList, setSelectedPlantIndicationList] = useState([])
 
   const formRef = useRef(null);
 
@@ -31,6 +33,13 @@ const FormPlant = (props) => {
     if (plantId != -1) {
 
       var contraindicationListString = (selectedPlantContraindicationList.join(','))
+      var constituentListString = (selectedPlantConstituentList.join(','))
+      var effectListString = (selectedPlantEffectList.join(','))
+      var negativeEffectListString = (selectedPlantNegativeEffectList.join(','))
+      var indicationListString = (selectedPlantIndicationList.join(','))
+
+      console.log(contraindicationListString)
+      console.log(indicationListString)
 
       const queryParams = new URLSearchParams();
       queryParams.append("plantId", plantId);
@@ -46,9 +55,12 @@ const FormPlant = (props) => {
       queryParams.append("plantSpeciesId", values.plantSpeciesId);
       queryParams.append("plantPartId", values.usedPartId);
       queryParams.set("plantContraindicationList", contraindicationListString);
+      queryParams.set("plantConstituentList", constituentListString);
+      queryParams.set("plantEffectList", effectListString);
+      queryParams.set("plantNegativeEffectList", negativeEffectListString);
+      queryParams.set("plantIndicationList", indicationListString);
       const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
-      console.log(contraindicationListString)
-      console.log(url)
+
       fetch(url, {
         method: "POST",
         headers: {
@@ -79,6 +91,23 @@ const FormPlant = (props) => {
     formRef.current.resetFields();
     props.modalHandler(false);
     props.setItemData(null);
+
+    setPlantConstituent([])
+
+
+    const [plantConstituent, ] = useState([]);
+    const [plantContraindication, setPlantContraindication] = useState([]);
+    const [plantEffect, setPlantEffect] = useState([]);
+    const [plantNegativeEffect, setPlantNegativeEffect] = useState([]);
+    const [plantIndication, setPlantIndication] = useState([]);
+
+
+
+    const [selectedPlantContraindicationList, setSelectedPlantContraindicationList] = useState([])
+    const [selectedPlantConstituentList, setSelectedPlantConstituentList] = useState([])
+    const [selectedPlantEffectList, setSelectedPlantEffectList] = useState([])
+    const [selectedPlantNegativeEffectList, setSelectedPlantNegativeEffectList] = useState([])
+    const [selectedPlantIndicationList, setSelectedPlantIndicationList] = useState([])
   };
 
   useEffect(() => {
@@ -98,7 +127,7 @@ const FormPlant = (props) => {
     fetch("http://localhost:5202/api/PlantOrigin/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
-        console.log("PlantOrigin", data);
+
         setOriginList(data);
       })
       .catch((error) => console.log(error));
@@ -146,33 +175,134 @@ const FormPlant = (props) => {
       .catch((error) => console.log(error));
 
 
+
     fetch("http://localhost:5202/api/PlantContraindication/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
-          console.log("lol : " + data.length)
           setPlantContraindication(data);
         })
         .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantContraindication/GetByPlantId?offset=0&limit=9999&plantId=" + plantId)
+    fetch("http://localhost:5202/api/PlantConstituent/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
-          setSelectedPlantContraindication(data);
-          console.log("selected list size : " + data.length)
-          data.forEach(element =>
-          {
-            console.log("selected list : " + element.plantContraindicationId)
-            selectedPlantContraindicationList.push(element.plantContraindicationId)
-          });
+          setPlantConstituent(data);
         })
         .catch((error) => console.log(error));
-  }, []);
+
+    fetch("http://localhost:5202/api/PlantEffect/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantEffect(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantNegativeEffect/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantNegativeEffect(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantIndication/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantIndication(data);
+        })
+        .catch((error) => console.log(error));
+
+
+
+
+    var tmpSelectedPlantContraindicationList = props?.itemData?.plantContraindicationList ?? null;
+    if (tmpSelectedPlantContraindicationList != null)
+    {
+      var selectedPlantContraindicationList_r = []
+      tmpSelectedPlantContraindicationList.forEach(entry => {
+        if (entry != null) {
+          selectedPlantContraindicationList_r.push(entry.plantContraindicationId)
+        }
+      })
+      setSelectedPlantContraindicationList(selectedPlantContraindicationList_r)
+    }
+
+
+    var tmpSelectedPlantConstituentList = props?.itemData?.plantConstituentList ?? null;
+    if (tmpSelectedPlantConstituentList != null)
+    {
+      var selectedPlantConstituentList_r = []
+      tmpSelectedPlantConstituentList.forEach(entry => {
+        if (entry != null) {
+          selectedPlantConstituentList_r.push(entry.plantConstituentId)
+        }
+      })
+      setSelectedPlantConstituentList(selectedPlantConstituentList_r)
+    }
+
+    var tmpSelectedPlantEffectList = props?.itemData?.plantEffectList ?? null;
+    if (tmpSelectedPlantEffectList != null)
+    {
+      var selectedPlantEffectList_r = []
+      tmpSelectedPlantEffectList.forEach(entry => {
+        if (entry != null) {
+          selectedPlantEffectList_r.push(entry.plantEffectId)
+        }
+      })
+      setSelectedPlantEffectList(selectedPlantEffectList_r)
+    }
+
+
+    var tmpSelectedPlantNegativeEffectList = props?.itemData?.plantNegativeEffectList ?? null;
+    if (tmpSelectedPlantNegativeEffectList != null)
+    {
+      var selectedPlantNegativeEffectList_r = []
+      tmpSelectedPlantNegativeEffectList.forEach(entry => {
+        if (entry != null) {
+          selectedPlantNegativeEffectList_r.push(entry.plantNegativeEffectId)
+        }
+      })
+      setSelectedPlantNegativeEffectList(selectedPlantNegativeEffectList_r)
+    }
+
+    var tmpSelectedPlantIndicationList = props?.itemData?.plantIndicationList ?? null;
+    if (tmpSelectedPlantIndicationList != null)
+    {
+      var selectedPlantIndicationList_r = []
+      tmpSelectedPlantIndicationList.forEach(entry => {
+        if (entry != null) {
+          selectedPlantIndicationList_r.push(entry.plantIndicationId)
+        }
+      })
+      setSelectedPlantIndicationList(selectedPlantIndicationList_r)
+    }
+
+
+  }, [props.showModal]);
+
+
+
 
   var plantContraindicationList = [];
-  var selectedPlantContraindicationList = [];
+  var plantConstituentList = [];
+  var plantEffectList = [];
+  var plantNegativeEffectList = [];
+  var plantIndicationList = [];
+
 
   const handlePlantContraindicationChange = (array) => {
-    selectedPlantContraindicationList = array
+    setSelectedPlantContraindicationList(array)
+  };
+  const handlePlantConstituentChange = (array) => {
+    setSelectedPlantConstituentList(array)
+  };
+  const handlePlantEffectChange = (array) => {
+    setSelectedPlantEffectList(array)
+  };
+  const handlePlantNegativeEffectChange = (array) => {
+    setSelectedPlantNegativeEffectList(array)
+  };
+  const handlePlantIndicationChange = (array) => {
+    setSelectedPlantIndicationList(array)
   };
 
 
@@ -185,9 +315,36 @@ const FormPlant = (props) => {
     });
   });
 
-  selectedPlantContraindication.map((element) =>
+  plantConstituent.map((element) =>
   {
-    plantContraindicationList.push(element.latinName);
+    plantConstituentList.push({
+      label: element.latinName,
+      value: element.plantConstituentId,
+    });
+  });
+
+  plantEffect.map((element) =>
+  {
+    plantEffectList.push({
+      label: element.latinName,
+      value: element.plantEffectId,
+    });
+  });
+
+  plantNegativeEffect.map((element) =>
+  {
+    plantNegativeEffectList.push({
+      label: element.latinName,
+      value: element.plantNegativeEffectId,
+    });
+  });
+
+  plantIndication.map((element) =>
+  {
+    plantIndicationList.push({
+      label: element.latinName,
+      value: element.plantIndicationId,
+    });
   });
 
 
@@ -422,16 +579,8 @@ const FormPlant = (props) => {
         <Form.Item
             label="Contre Indication"
             name="contraindications"
-
             initialValue={selectedPlantContraindicationList}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please input your password!",
-            //   },
-            // ]}
         >
-
             <Select
                 mode="multiple"
                 allowClear
@@ -445,16 +594,79 @@ const FormPlant = (props) => {
 
         </Form.Item>
 
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
+        <Form.Item
+            label="Constituents"
+            name="Constituents"
+            initialValue={selectedPlantConstituentList}
         >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantConstituentChange}
+              options = {plantConstituentList}
+          />
+
+        </Form.Item>
+
+        <Form.Item
+            label="Effets"
+            name="Effects"
+            initialValue={selectedPlantEffectList}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantEffectChange}
+              options = {plantEffectList}
+          />
+
+        </Form.Item>
+
+
+        <Form.Item
+            label="Negative Effects"
+            name="NegativeEffects"
+            initialValue={selectedPlantNegativeEffectList}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantNegativeEffectChange}
+              options = {plantNegativeEffectList}
+          />
+
+        </Form.Item>
+
+
+        <Form.Item
+            label="Indications"
+            name="Indications"
+            initialValue={selectedPlantIndicationList}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantIndicationChange}
+              options = {plantIndicationList}
+          />
+
+        </Form.Item>
 
         <Form.Item
           wrapperCol={{

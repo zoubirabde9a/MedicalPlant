@@ -5,7 +5,6 @@ const AddReference = (props) => {
   const formRef = useRef(null);
 
   const addReference = (data) => {
-    console.log("dattaaa ", data.latinName);
     const queryParams = new URLSearchParams();
     queryParams.append("latinName", data.latinName);
     const url = `http://localhost:5202/api/${props.reference.name}/Add?${queryParams.toString()}`;
@@ -18,7 +17,6 @@ const AddReference = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("add ref fetched ", res);
         formRef.current.resetFields();
         props.reloadList();
         // setLoading(false);
@@ -38,8 +36,6 @@ const AddReference = (props) => {
   };
 
   const updateReference = (data) => {
-    console.log("dattaaa modifier", data);
-    console.log("dattaaa modifier", props.referenceObject.id);
 
     const queryParams = new URLSearchParams();
     queryParams.append("id", props.referenceObject.id);
@@ -56,7 +52,6 @@ const AddReference = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("update ref fetched ", res);
         formRef.current.resetFields();
 
         props.reloadList();
@@ -76,8 +71,8 @@ const AddReference = (props) => {
     formRef.current.resetFields();
     props.setReferenceObject(null);
   };
-  console.log("hi morning ", props.referenceObject?.name);
-  useEffect(() => {
+
+ useEffect(() => {
     if (formRef.current != undefined) {
         //   console.log("hi formRef 1", formRef.current);
     

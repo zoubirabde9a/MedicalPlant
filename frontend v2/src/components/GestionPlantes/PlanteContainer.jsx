@@ -62,12 +62,11 @@ const PlantContainer = () => {
       .catch((error) => console.log(error));
   };
 
-  console.log("filterText : " + filterText);
+
   const fetchData = () => {
     fetch(`http://localhost:5202/api/Plant/GetAllByLatinName?offset=0&limit=99999&latinNameLike=` + filterText)
       .then((response) => response.json())
       .then((data) => {
-        console.log("tableData ", data);
         setTableData(data);
       })
       .catch((error) => console.log(error));

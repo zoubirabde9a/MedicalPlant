@@ -3,9 +3,49 @@ import { useEffect, useState } from "react";
 
 const Datatable = (props) => {
 
+  const getStringFromList = (record, recordList) =>
+  {
+    if (record == null || record == undefined ||
+        recordList == null || recordList == undefined)
+    {
+      return ""
+    }
+    var list = []
+    recordList.forEach((entry) =>
+    {
+      if (entry != null && entry != undefined) {
+        list.push(entry.latinName)
+      }
+    })
+
+    return list.join(', ')
+  }
+
+  const getStringFromList_ = (record, recordList) =>
+  {
+    console.log("recordList : ", recordList.length)
+    if (record == null || record == undefined ||
+        recordList == null || recordList == undefined)
+    {
+      return ""
+    }
+    console.log("a ", recordList.length)
+    var list = []
+    recordList.forEach((entry) =>
+    {
+      console.log(entry)
+      if (entry != null && entry != undefined) {
+        list.push(entry.latinName)
+        console.log(entry.latinName)
+      }
+    })
+    console.log("c ", recordList.length)
+    return list.join(', ')
+  }
+
   const columns = [
     {
-      title: "plantId",
+      title: "Id",
       dataIndex: "plantId",
       key: "plantId",
       align: "center",
@@ -30,56 +70,56 @@ const Datatable = (props) => {
       // render: (text) => <a>{text.latinName}</a>,
     },
     {
-      title: "origin",
+      title: "Origine",
       dataIndex: "origin",
       key: "origin",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "vegetableReign",
+      title: "Régne",
       dataIndex: "vegetableReign",
       key: "vegetableReign",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantDivision",
+      title: "Division",
       dataIndex: "plantDivision",
       key: "plantDivision",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantClass",
+      title: "Classe",
       dataIndex: "plantClass",
       key: "plantClass",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantFamily",
+      title: "Famille",
       dataIndex: "plantFamily",
       key: "plantFamily",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantGenre",
+      title: "Genre",
       dataIndex: "plantGenre",
       key: "plantGenre",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantSpecies",
+      title: "éspece",
       dataIndex: "plantSpecies",
       key: "plantSpecies",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "usedPart",
+      title: "Partie Utilisee",
       dataIndex: "usedPart",
       key: "usedPart",
       align: "center",
@@ -96,39 +136,39 @@ const Datatable = (props) => {
 
 
     {
-      title: "usedPart",
-      dataIndex: "usedPart",
-      key: "usedPart",
+      title: "Contre Indications",
+      dataIndex: "contraindications",
+      key: "plantContraindicationList",
       align: "center",
-      render: (item) => <a>{item.latinName}</a>,
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantContraindicationList)}</a>,
     },
     {
-      title: "usedPart",
-      dataIndex: "usedPart",
-      key: "usedPart",
+      title: "Constituents",
+      dataIndex: "constituents",
+      key: "plantConstituentList",
       align: "center",
-      render: (item) => <a>{item.latinName}</a>,
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantConstituentList)}</a>,
     },
     {
-      title: "usedPart",
-      dataIndex: "usedPart",
-      key: "usedPart",
+      title: "Effects",
+      dataIndex: "effects",
+      key: "plantEffectList",
       align: "center",
-      render: (item) => <a>{item.latinName}</a>,
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantEffectList)}</a>,
     },
     {
-      title: "usedPart",
-      dataIndex: "usedPart",
-      key: "usedPart",
+      title: "Effects Negatives",
+      dataIndex: "negativeEffect",
+      key: "plantNegativeEffectList",
       align: "center",
-      render: (item) => <a>{item.latinName}</a>,
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantNegativeEffectList)}</a>,
     },
     {
-      title: "usedPart",
-      dataIndex: "usedPart",
-      key: "usedPart",
+      title: "Indications",
+      dataIndex: "indications",
+      key: "plantIndicationList",
       align: "center",
-      render: (item) => <a>{item.latinName}</a>,
+      render: (text,record,index) => <a>{getStringFromList_(record, record?.plantIndicationList)}</a>,
     },
 
 
@@ -209,8 +249,7 @@ const Datatable = (props) => {
     })
         .then((response) => {
           response.json().then((data) => {
-            console.log("hamdoulah ");
-            console.log("data : " + data.error);
+
             props.fetchData();
             props.modalHandler(false);
           })
