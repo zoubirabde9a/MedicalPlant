@@ -1,5 +1,6 @@
 import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useRef } from "react";
+import BackendServerUrl from "../../Config.jsx";
 
 const AddReference = (props) => {
   const formRef = useRef(null);
@@ -7,7 +8,7 @@ const AddReference = (props) => {
   const addReference = (data) => {
     const queryParams = new URLSearchParams();
     queryParams.append("latinName", data.latinName);
-    const url = `http://localhost:5202/api/${props.reference.name}/Add?${queryParams.toString()}`;
+    const url = BackendServerUrl + `api/${props.reference.name}/Add?${queryParams.toString()}`;
 
     fetch(url, {
       method: "POST",
@@ -42,8 +43,8 @@ const AddReference = (props) => {
     queryParams.append("id", props.referenceObject.id);
     queryParams.append("latinName", data.latinName);
 
-    const url = `http://localhost:5202/api/${props.reference.name}/Update?${queryParams.toString()}`;
-    // const url = `http://localhost:5202/api/${props.reference.name}/Update?${queryParams.toString()}`;
+    const url = BackendServerUrl + `api/${props.reference.name}/Update?${queryParams.toString()}`;
+    // const url = BackendServerUrl + `api/${props.reference.name}/Update?${queryParams.toString()}`;
 
     fetch(url, {
       method: "POST",

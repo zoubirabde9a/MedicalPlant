@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input, List, Modal, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
 import FormItem from "antd/es/form/FormItem/index.js";
+import BackendServerUrl from "../../Config.jsx";
 
 const PropertySelector = (props) => {
   const [propertyList, setPropertyList] = useState([]);
@@ -10,32 +11,32 @@ const PropertySelector = (props) => {
   var pageOffset = 0
   var pageSize = 99999
 
-  var path = `http://localhost:5202/api/PlantContraindication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+  var path = BackendServerUrl + `api/PlantContraindication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
   switch ("PlantOrigin")
   {
     case "PlantOrigin":
-      path = `http://localhost:5202/api/PlantContraindication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantContraindication/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "VegetableReign":
-      path = `http://localhost:5202/api/VegetableReign/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/VegetableReign/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantDivision":
-      path = `http://localhost:5202/api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantClass":
-      path = `http://localhost:5202/api/PlantClass/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantClass/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantFamily":
-      path = `http://localhost:5202/api/PlantFamily/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantFamily/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantGenre":
-      path = `http://localhost:5202/api/PlantGenre/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantGenre/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantSpecies":
-      path = `http://localhost:5202/api/PlantSpecies/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantSpecies/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
     case "PlantPart":
-      path = `http://localhost:5202/api/PlantPart/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+      path = BackendServerUrl + `api/PlantPart/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
       break;
   }
   useEffect(() => {

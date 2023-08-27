@@ -1,5 +1,6 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
+import BackendServerUrl from "../../Config.jsx";
 
 const FormPlant = (props) => {
   const [originList, setOriginList] = useState([]);
@@ -68,7 +69,7 @@ const FormPlant = (props) => {
       queryParams.set("plantEffectList", effectListString);
       queryParams.set("plantNegativeEffectList", negativeEffectListString);
       queryParams.set("plantIndicationList", indicationListString);
-      const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
+      const url = BackendServerUrl + `api/Plant/Update?${queryParams.toString()}`;
 
       fetch(url, {
         method: "POST",
@@ -195,14 +196,14 @@ const FormPlant = (props) => {
       plantId = 0
     }
 
-    fetch("http://localhost:5202/api/PlantDivision/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantDivision/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantDivisionList(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantOrigin/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantOrigin/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
 
@@ -210,42 +211,42 @@ const FormPlant = (props) => {
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/VegetableReign/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/VegetableReign/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setVegetableReignList(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantClass/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantClass/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantClass(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantFamily/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantFamily/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantFamily(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantGenre/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantGenre/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantGenre(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantSpecies/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantSpecies/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantSpecies(data);
       })
       .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantPart/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantPart/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
         setPlantPart(data);
@@ -254,35 +255,35 @@ const FormPlant = (props) => {
 
 
 
-    fetch("http://localhost:5202/api/PlantContraindication/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantContraindication/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
           setPlantContraindication(data);
         })
         .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantConstituent/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantConstituent/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
           setPlantConstituent(data);
         })
         .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantEffect/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantEffect/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
           setPlantEffect(data);
         })
         .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantNegativeEffect/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantNegativeEffect/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
           setPlantNegativeEffect(data);
         })
         .catch((error) => console.log(error));
 
-    fetch("http://localhost:5202/api/PlantIndication/GetAll?offset=0&limit=9999")
+    fetch(BackendServerUrl + "api/PlantIndication/GetAll?offset=0&limit=9999")
         .then((response) => response.json())
         .then((data) => {
           setPlantIndication(data);
