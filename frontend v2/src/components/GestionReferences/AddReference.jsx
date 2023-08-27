@@ -5,7 +5,6 @@ const AddReference = (props) => {
   const formRef = useRef(null);
 
   const addReference = (data) => {
-    console.log("dattaaa ", data.latinName);
     const queryParams = new URLSearchParams();
     queryParams.append("latinName", data.latinName);
     const url = `http://localhost:5202/api/${props.reference.name}/Add?${queryParams.toString()}`;
@@ -18,7 +17,6 @@ const AddReference = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("add ref fetched ", res);
         formRef.current.resetFields();
         props.reloadList();
         // setLoading(false);
@@ -35,11 +33,10 @@ const AddReference = (props) => {
       .catch((err) => {
         console.log("add ref errs ", err);
       });
+      closeModal()
   };
 
   const updateReference = (data) => {
-    console.log("dattaaa modifier", data);
-    console.log("dattaaa modifier", props.referenceObject.id);
 
     const queryParams = new URLSearchParams();
     queryParams.append("id", props.referenceObject.id);
@@ -56,7 +53,6 @@ const AddReference = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("update ref fetched ", res);
         formRef.current.resetFields();
 
         props.reloadList();
@@ -70,14 +66,16 @@ const AddReference = (props) => {
       .catch((err) => {
         console.log("update ref errs ", err);
       });
+
+      closeModal()
   };
 
   const closeModal = () => {
     formRef.current.resetFields();
     props.setReferenceObject(null);
   };
-  console.log("hi morning ", props.referenceObject?.name);
-  useEffect(() => {
+
+ useEffect(() => {
     if (formRef.current != undefined) {
         //   console.log("hi formRef 1", formRef.current);
     
@@ -87,7 +85,7 @@ const AddReference = (props) => {
   }, [ props.referenceObject?.name]);
 
   return (
-    <Modal title={`${props.referenceObject?.action == "Add" ? "Ajouter une nouvelle" : "Modifier"} reference ${props.reference.label}`} open={props?.openModal} onOk={closeModal} onCancel={closeModal}>
+    <Modal title={`${props.referenceObject?.action == "Add" ? "Ajouter une nouvelle" : "Modifier"} reference ${props.reference.label}`} open={props?.openModal} onOk={closeModal} onCancel={closeModal} footer={null}>
       <Form
         name="basic"
         labelCol={{
@@ -127,7 +125,7 @@ const AddReference = (props) => {
           }}
         >
           <Button type="primary" htmlType="submit">
-            Submit
+            Soumettre
           </Button>
         </Form.Item>
       </Form>

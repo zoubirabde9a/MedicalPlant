@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, List, Modal, Select } from "antd";
+import { Button, Form, Input, Modal, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
 
 const FormPlant = (props) => {
@@ -11,16 +11,45 @@ const FormPlant = (props) => {
   const [plantSpeciesList, setPlantSpecies] = useState([]);
   const [plantPartList, setPlantPart] = useState([]);
 
+  const [plantConstituent, setPlantConstituent] = useState(null);
+  const [plantContraindication, setPlantContraindication] = useState(null);
+  const [plantEffect, setPlantEffect] = useState(null);
+  const [plantNegativeEffect, setPlantNegativeEffect] = useState(null);
+  const [plantIndication, setPlantIndication] = useState(null);
+
+  const [selectedPlantContraindicationList, setSelectedPlantContraindicationList] = useState(null)
+  const [selectedPlantConstituentList, setSelectedPlantConstituentList] = useState(null)
+  const [selectedPlantEffectList, setSelectedPlantEffectList] = useState(null)
+  const [selectedPlantNegativeEffectList, setSelectedPlantNegativeEffectList] = useState(null)
+  const [selectedPlantIndicationList, setSelectedPlantIndicationList] = useState(null)
+
+
+  const [plantContraindicationList, setPlantContraindicationList] = useState([])
+  const [plantConstituentList, setPlantConstituentList] = useState([])
+  const [plantEffectList, setPlantEffectList] = useState([])
+  const [plantNegativeEffectList, setPlantNegativeEffectList] = useState([])
+  const [plantIndicationList, setPlantIndicationList] = useState([])
+
   const formRef = useRef(null);
 
-  const onFinish = async (values) => {
-    console.log("onFinish: ", values);
+  const isDataReady = () =>
+  {
+    return true;
+  }
 
-    console.log("iteme data : " + props.itemData);
+  const onFinish = async (values) => {
     var plantId = props.itemData.plantId
 
-
     if (plantId != -1) {
+
+      var contraindicationListString = (selectedPlantContraindicationList.join(','))
+      var constituentListString = (selectedPlantConstituentList.join(','))
+      var effectListString = (selectedPlantEffectList.join(','))
+      var negativeEffectListString = (selectedPlantNegativeEffectList.join(','))
+      var indicationListString = (selectedPlantIndicationList.join(','))
+
+      console.log(values)
+
       const queryParams = new URLSearchParams();
       queryParams.append("plantId", plantId);
       queryParams.append("latinName", values.latinName);
@@ -34,23 +63,27 @@ const FormPlant = (props) => {
       queryParams.append("plantGenreId", values.plantGenreId);
       queryParams.append("plantSpeciesId", values.plantSpeciesId);
       queryParams.append("plantPartId", values.usedPartId);
+      queryParams.set("plantContraindicationList", contraindicationListString);
+      queryParams.set("plantConstituentList", constituentListString);
+      queryParams.set("plantEffectList", effectListString);
+      queryParams.set("plantNegativeEffectList", negativeEffectListString);
+      queryParams.set("plantIndicationList", indicationListString);
       const url = `http://localhost:5202/api/Plant/Update?${queryParams.toString()}`;
+
       fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       })
-          .then((response) => {
-            response.json().then((data) => {
-              console.log("hamdoulah ");
-              console.log("data : " + data.error);
-              props.fetchData();
-              props.modalHandler(false);
-            })
-            .catch((error) => console.log(error));
+      .then((response) => {
+        response.json().then((data) => {
+          props.fetchData();
+          props.modalHandler(false);
+        })
+        .catch((error) => console.log(error));
 
-          })
+      })
 
     } else {
       console.log("ERRROROROROROROROROR");
@@ -64,12 +97,104 @@ const FormPlant = (props) => {
   //   props.modalHandler(false);
   // };
   const closeModal = () => {
+    console.log("closing modal!")
     formRef.current.resetFields();
     props.modalHandler(false);
     props.setItemData(null);
+
+    setPlantConstituent(null)
+    setPlantContraindication(null)
+    setPlantEffect(null)
+    setPlantNegativeEffect(null)
+    setPlantIndication(null)
+
+    setSelectedPlantConstituentList(null)
+    setSelectedPlantContraindicationList(null)
+    setSelectedPlantEffectList(null)
+    setSelectedPlantNegativeEffectList(null)
+    setSelectedPlantIndicationList(null)
   };
 
+
+  const getPropertyEntry = (entry, property) =>
+  {
+    var id = 0
+    switch (property)
+    {
+      case 'plantContraindication':
+      {
+        id = entry.plantContraindicationId
+        break;
+      }
+
+      case 'plantConstituent':
+      {
+        id = entry.plantConstituentId
+        break;
+      }
+
+      case 'plantEffect':
+      {
+        id = entry.plantEffectId
+        break;
+      }
+
+      case 'plantNegativeEffect':
+      {
+        id = entry.plantNegativeEffectId
+        break;
+      }
+
+      case 'plantIndication':
+      {
+        id = entry.plantIndicationId
+        break;
+      }
+    }
+
+    return id;
+  }
+
+  const getSelectedPropertyList = (list, property) =>
+  {
+    if (list != null)
+    {
+      var propertyList = []
+      list.forEach(entry =>
+      {
+        if (entry != null)
+        {
+          propertyList.push(getPropertyEntry(entry, property))
+        }
+      })
+      return propertyList
+    }
+  }
+
+  const getViewList = (list, propertyName) =>
+  {
+    var list_list = []
+    if (list != null) {
+      list.map((element) => {
+        list_list.push({
+          label: element.latinName,
+          value: getPropertyEntry(element, propertyName),
+        });
+      });
+    }
+    return list_list
+  }
+
+
+
   useEffect(() => {
+
+    var plantId = props?.itemData?.plantId ?? 0
+    if (plantId == undefined)
+    {
+      plantId = 0
+    }
+
     fetch("http://localhost:5202/api/PlantDivision/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
@@ -80,7 +205,7 @@ const FormPlant = (props) => {
     fetch("http://localhost:5202/api/PlantOrigin/GetAll?offset=0&limit=9999")
       .then((response) => response.json())
       .then((data) => {
-        console.log("PlantOrigin", data);
+
         setOriginList(data);
       })
       .catch((error) => console.log(error));
@@ -126,10 +251,124 @@ const FormPlant = (props) => {
         setPlantPart(data);
       })
       .catch((error) => console.log(error));
-  }, []);
 
-  return props.showModal ? (
-    <Modal title="Ajouter une nouvelle plante" open={props.showModal} onOk={closeModal} onCancel={closeModal}>
+
+
+    fetch("http://localhost:5202/api/PlantContraindication/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantContraindication(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantConstituent/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantConstituent(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantEffect/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantEffect(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantNegativeEffect/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantNegativeEffect(data);
+        })
+        .catch((error) => console.log(error));
+
+    fetch("http://localhost:5202/api/PlantIndication/GetAll?offset=0&limit=9999")
+        .then((response) => response.json())
+        .then((data) => {
+          setPlantIndication(data);
+        })
+        .catch((error) => console.log(error));
+
+    var plantContraindicationList_list = getViewList(plantContraindication, "plantContraindication")
+    setPlantContraindicationList(plantContraindicationList_list)
+
+    var plantConstituentList_list = getViewList(plantConstituent, "plantConstituent")
+    setPlantConstituentList(plantConstituentList_list)
+
+    var plantEffectList_list = getViewList(plantEffect, "plantEffect")
+    setPlantEffectList(plantEffectList_list)
+
+    var plantNegativeEffectList_list = getViewList(plantNegativeEffect, "plantNegativeEffect")
+    setPlantNegativeEffectList(plantNegativeEffectList_list)
+
+    var plantIndicationList_list = getViewList(plantIndication, "plantIndication")
+    setPlantIndicationList(plantIndicationList_list)
+
+  }, [props.showModal]);
+
+  useEffect(()=> {
+    var selectedPlantContraindicationList_r =
+        getSelectedPropertyList(props?.itemData?.plantContraindicationList ?? null, "plantContraindication")
+    setSelectedPlantContraindicationList(selectedPlantContraindicationList_r)
+
+  }, [props?.itemData?.plantContraindicationList])
+
+  useEffect(()=>
+  {
+    var selectedPlantConstituentList_r =
+        getSelectedPropertyList(props?.itemData?.plantConstituentList ?? null, "plantConstituent")
+    setSelectedPlantConstituentList(selectedPlantConstituentList_r)
+
+  }, [props?.itemData?.plantConstituentList])
+
+  useEffect(()=>
+  {
+    var selectedPlantEffectList_r =
+        getSelectedPropertyList( props?.itemData?.plantEffectList ?? null, "plantEffect")
+    setSelectedPlantEffectList(selectedPlantEffectList_r)
+
+  }, [props?.itemData?.plantEffectList])
+
+
+  useEffect(()=>
+  {
+
+    var selectedPlantNegativeEffectList_r =
+        getSelectedPropertyList(props?.itemData?.plantNegativeEffectList ?? null, "plantNegativeEffect")
+    setSelectedPlantNegativeEffectList(selectedPlantNegativeEffectList_r)
+
+
+  }, [props?.itemData?.plantNegativeEffectList])
+
+
+  useEffect(()=>
+  {
+
+    var selectedPlantIndicationList_r =
+        getSelectedPropertyList(props?.itemData?.plantIndicationList ?? null, "plantIndication")
+    setSelectedPlantIndicationList(selectedPlantIndicationList_r)
+
+  }, [props?.itemData?.plantIndicationList])
+
+  const handlePlantContraindicationChange = (array) => {
+    setSelectedPlantContraindicationList(array)
+  };
+  const handlePlantConstituentChange = (array) => {
+    setSelectedPlantConstituentList(array)
+  };
+  const handlePlantEffectChange = (array) => {
+    setSelectedPlantEffectList(array)
+  };
+  const handlePlantNegativeEffectChange = (array) => {
+    setSelectedPlantNegativeEffectList(array)
+  };
+  const handlePlantIndicationChange = (array) => {
+    setSelectedPlantIndicationList(array)
+  };
+
+
+  return props.showModal && isDataReady() ? (
+    <Modal title="Ajouter une nouvelle plante" open={props.showModal} onCancel={closeModal}  footer={null}  okButtonProps={{ disabled: true }}>
       <Form
         name="basic"
         labelCol={{
@@ -346,27 +585,113 @@ const FormPlant = (props) => {
             ))}
           </Select>
         </Form.Item>
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
+
+
+
+
+
+
+
 
         <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
+            label="Contre Indication"
+            name="contraindications"
+            initialValue={ getSelectedPropertyList(props?.itemData?.plantContraindicationList ?? null, "plantContraindication")}
         >
+            <Select
+                mode="multiple"
+                allowClear
+                style={{
+                  width: '100%',
+                }}
+                placeholder="Please select"
+                onChange={handlePlantContraindicationChange}
+                options = {plantContraindicationList}
+            />
+
+        </Form.Item>
+
+        <Form.Item
+            label="Constituents"
+            name="Constituents"
+            initialValue={getSelectedPropertyList(props?.itemData?.plantConstituentList ?? null, "plantConstituent")}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantConstituentChange}
+              options = {plantConstituentList}
+          />
+
+        </Form.Item>
+
+        <Form.Item
+            label="Effets"
+            name="Effects"
+            initialValue={getSelectedPropertyList(props?.itemData?.plantEffectList ?? null, "plantEffect")}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantEffectChange}
+              options = {plantEffectList}
+          />
+
+        </Form.Item>
+
+
+        <Form.Item
+            label="Negative Effects"
+            name="NegativeEffects"
+            initialValue={getSelectedPropertyList(props?.itemData?.plantNegativeEffectList ?? null, "plantNegativeEffect")}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantNegativeEffectChange}
+              options = {plantNegativeEffectList}
+          />
+
+        </Form.Item>
+
+
+        <Form.Item
+            label="Indications"
+            name="Indications"
+            initialValue={getSelectedPropertyList(props?.itemData?.plantIndicationList ?? null, "plantIndication")}
+        >
+          <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
+              }}
+              placeholder="Please select"
+              onChange={handlePlantIndicationChange}
+              options = {plantIndicationList}
+          />
+
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            Soumettre
           </Button>
         </Form.Item>
+
+
       </Form>
     </Modal>
   ) : null;

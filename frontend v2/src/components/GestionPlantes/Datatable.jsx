@@ -3,9 +3,27 @@ import { useEffect, useState } from "react";
 
 const Datatable = (props) => {
 
+  const getStringFromList = (record, recordList) =>
+  {
+    if (record == null || record == undefined ||
+        recordList == null || recordList == undefined)
+    {
+      return ""
+    }
+    var list = []
+    recordList.forEach((entry) =>
+    {
+      if (entry != null && entry != undefined) {
+        list.push(entry.latinName)
+      }
+    })
+
+    return list.join(', ')
+  }
+
   const columns = [
     {
-      title: "plantId",
+      title: "Id",
       dataIndex: "plantId",
       key: "plantId",
       align: "center",
@@ -30,61 +48,114 @@ const Datatable = (props) => {
       // render: (text) => <a>{text.latinName}</a>,
     },
     {
-      title: "origin",
+      title: "Origine",
       dataIndex: "origin",
       key: "origin",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "vegetableReign",
+      title: "Régne",
       dataIndex: "vegetableReign",
       key: "vegetableReign",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantDivision",
+      title: "Division",
       dataIndex: "plantDivision",
       key: "plantDivision",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantClass",
+      title: "Classe",
       dataIndex: "plantClass",
       key: "plantClass",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantFamily",
+      title: "Famille",
       dataIndex: "plantFamily",
       key: "plantFamily",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantGenre",
+      title: "Genre",
       dataIndex: "plantGenre",
       key: "plantGenre",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "plantSpecies",
+      title: "éspece",
       dataIndex: "plantSpecies",
       key: "plantSpecies",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
     {
-      title: "usedPart",
+      title: "Partie Utilisee",
       dataIndex: "usedPart",
       key: "usedPart",
       align: "center",
       render: (item) => <a>{item.latinName}</a>,
     },
+
+
+
+
+
+
+
+
+
+
+    {
+      title: "Contre Indications",
+      dataIndex: "contraindications",
+      key: "plantContraindicationList",
+      align: "center",
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantContraindicationList)}</a>,
+    },
+    {
+      title: "Constituents",
+      dataIndex: "constituents",
+      key: "plantConstituentList",
+      align: "center",
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantConstituentList)}</a>,
+    },
+    {
+      title: "Effects",
+      dataIndex: "effects",
+      key: "plantEffectList",
+      align: "center",
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantEffectList)}</a>,
+    },
+    {
+      title: "Effects Negatives",
+      dataIndex: "negativeEffect",
+      key: "plantNegativeEffectList",
+      align: "center",
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantNegativeEffectList)}</a>,
+    },
+    {
+      title: "Indications",
+      dataIndex: "indications",
+      key: "plantIndicationList",
+      align: "center",
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantIndicationList)}</a>,
+    },
+
+
+
+
+
+
+
+
     {
       title: "Action",
       dataIndex: "action",
@@ -142,28 +213,8 @@ const Datatable = (props) => {
   }
 
   const onDelete = (record)=>{
-    console.log('eeeeeeeeeeee ',record);
-
-    const queryParams = new URLSearchParams();
-    queryParams.append("plantId", record.plantId);
-
-    const url = `http://localhost:5202/api/Plant/Remove?${queryParams.toString()}`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-        .then((response) => {
-          response.json().then((data) => {
-            console.log("hamdoulah ");
-            console.log("data : " + data.error);
-            props.fetchData();
-            props.modalHandler(false);
-          })
-              .catch((error) => console.log(error));
-
-        })
+    props.setItemData(record)
+    props.setShowDeletePlant(true)
   }
 
   useEffect(() => {

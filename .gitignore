@@ -12,6 +12,8 @@ AppMac.app/
 Env/
 Logs/
 
+backend/MedicalPlant/bin/
+
 # Visual Studio cache directory
 .vs/
 .vscode/

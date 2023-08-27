@@ -33,7 +33,6 @@ const ReferenceList = (props) => {
     fetch(`http://localhost:5202/api/${props.reference.name}/GetAll?offset=0&limit=9999`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("data fetched ", data);
         setList(data);
       })
       .catch((error) => console.log(error));
@@ -55,7 +54,6 @@ const ReferenceList = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("delete ref fetched ", res);
         loadData();
         // setLoading(false);
 
@@ -95,7 +93,6 @@ const ReferenceList = (props) => {
       <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "2", padding: "15px", marginRight: "2.5%" }}>
         <Button
           onClick={() => {
-            console.log("HEH ajouter ");
 
             setReferenceObject({open:true,action:"Add",item:null});
           }}
