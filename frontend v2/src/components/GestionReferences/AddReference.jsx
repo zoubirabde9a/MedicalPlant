@@ -33,6 +33,7 @@ const AddReference = (props) => {
       .catch((err) => {
         console.log("add ref errs ", err);
       });
+      closeModal()
   };
 
   const updateReference = (data) => {
@@ -65,6 +66,8 @@ const AddReference = (props) => {
       .catch((err) => {
         console.log("update ref errs ", err);
       });
+
+      closeModal()
   };
 
   const closeModal = () => {
@@ -82,7 +85,7 @@ const AddReference = (props) => {
   }, [ props.referenceObject?.name]);
 
   return (
-    <Modal title={`${props.referenceObject?.action == "Add" ? "Ajouter une nouvelle" : "Modifier"} reference ${props.reference.label}`} open={props?.openModal} onOk={closeModal} onCancel={closeModal}>
+    <Modal title={`${props.referenceObject?.action == "Add" ? "Ajouter une nouvelle" : "Modifier"} reference ${props.reference.label}`} open={props?.openModal} onOk={closeModal} onCancel={closeModal} footer={null}>
       <Form
         name="basic"
         labelCol={{
@@ -122,7 +125,7 @@ const AddReference = (props) => {
           }}
         >
           <Button type="primary" htmlType="submit">
-            Submit
+            Soumettre
           </Button>
         </Form.Item>
       </Form>

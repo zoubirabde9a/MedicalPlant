@@ -21,28 +21,6 @@ const Datatable = (props) => {
     return list.join(', ')
   }
 
-  const getStringFromList_ = (record, recordList) =>
-  {
-    console.log("recordList : ", recordList.length)
-    if (record == null || record == undefined ||
-        recordList == null || recordList == undefined)
-    {
-      return ""
-    }
-    console.log("a ", recordList.length)
-    var list = []
-    recordList.forEach((entry) =>
-    {
-      console.log(entry)
-      if (entry != null && entry != undefined) {
-        list.push(entry.latinName)
-        console.log(entry.latinName)
-      }
-    })
-    console.log("c ", recordList.length)
-    return list.join(', ')
-  }
-
   const columns = [
     {
       title: "Id",
@@ -168,7 +146,7 @@ const Datatable = (props) => {
       dataIndex: "indications",
       key: "plantIndicationList",
       align: "center",
-      render: (text,record,index) => <a>{getStringFromList_(record, record?.plantIndicationList)}</a>,
+      render: (text,record,index) => <a>{getStringFromList(record, record?.plantIndicationList)}</a>,
     },
 
 
@@ -235,27 +213,8 @@ const Datatable = (props) => {
   }
 
   const onDelete = (record)=>{
-    console.log('eeeeeeeeeeee ',record);
-
-    const queryParams = new URLSearchParams();
-    queryParams.append("plantId", record.plantId);
-
-    const url = `http://localhost:5202/api/Plant/Remove?${queryParams.toString()}`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-        .then((response) => {
-          response.json().then((data) => {
-
-            props.fetchData();
-            props.modalHandler(false);
-          })
-              .catch((error) => console.log(error));
-
-        })
+    props.setItemData(record)
+    props.setShowDeletePlant(true)
   }
 
   useEffect(() => {

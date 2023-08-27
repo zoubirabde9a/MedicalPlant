@@ -1,12 +1,14 @@
 import { AutoComplete, Button, Layout } from "antd";
 import FormPlant from "./FormPlant";
 import Datatable from "./Datatable";
+import DeletePlant from './DeletePlant';
 import { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import PropertySelector from "./PropertySelector.jsx";
 
 const PlantContainer = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showDeletePlant, setShowDeletePlant] = useState(false);
   const [showPropertySelector, setShowPropertySelector] = useState(false);
   const [searchData, setSearchData] = useState(null);
   const [filterText, setFilterText] = useState("");
@@ -108,8 +110,9 @@ const PlantContainer = () => {
       />
 
       <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} setItemData={setItemData} itemData={itemData}/>
+      <DeletePlant fetchData={fetchData} itemData={itemData} setShowDeletePlant={setShowDeletePlant} showDeletePlant={showDeletePlant} />
       <PropertySelector showPropertySelector={showPropertySelector} propertySelectorHandler={propertySelectorHandler}/>
-      <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData}/>
+      <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData} setShowDeletePlant={setShowDeletePlant} showDeletePlant={setShowDeletePlant}/>
     </Content>
   );
 };
