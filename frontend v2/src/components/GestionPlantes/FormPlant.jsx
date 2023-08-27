@@ -39,7 +39,7 @@ const FormPlant = (props) => {
   }
 
   const onFinish = async (values) => {
-    var plantId = props.itemData.plantId
+    var plantId = props?.itemData?.plantId ?? -1
 
     if (plantId != -1) {
 
