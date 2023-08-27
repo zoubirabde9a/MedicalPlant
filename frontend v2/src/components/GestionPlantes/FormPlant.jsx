@@ -18,11 +18,11 @@ const FormPlant = (props) => {
   const [plantNegativeEffect, setPlantNegativeEffect] = useState(null);
   const [plantIndication, setPlantIndication] = useState(null);
 
-  const [selectedPlantContraindicationList, setSelectedPlantContraindicationList] = useState(null)
-  const [selectedPlantConstituentList, setSelectedPlantConstituentList] = useState(null)
-  const [selectedPlantEffectList, setSelectedPlantEffectList] = useState(null)
-  const [selectedPlantNegativeEffectList, setSelectedPlantNegativeEffectList] = useState(null)
-  const [selectedPlantIndicationList, setSelectedPlantIndicationList] = useState(null)
+  const [selectedPlantContraindicationList, setSelectedPlantContraindicationList] = useState([])
+  const [selectedPlantConstituentList, setSelectedPlantConstituentList] = useState([])
+  const [selectedPlantEffectList, setSelectedPlantEffectList] = useState([])
+  const [selectedPlantNegativeEffectList, setSelectedPlantNegativeEffectList] = useState([])
+  const [selectedPlantIndicationList, setSelectedPlantIndicationList] = useState([])
 
 
   const [plantContraindicationList, setPlantContraindicationList] = useState([])
@@ -41,15 +41,33 @@ const FormPlant = (props) => {
   const onFinish = async (values) => {
     var plantId = props?.itemData?.plantId ?? -1
 
+    if (plantId == -1)
+    {
+      const queryParams = new URLSearchParams();
+      queryParams.append("latinName", values.latinName);
+      const url = BackendServerUrl + `api/Plant/Add?${queryParams.toString()}`;
+      var response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      await response.json().then((data) => {
+        plantId = data?.plantId ?? -1
+      })
+      .catch((error) => console.log(error));
+    }
+
+    console.log(plantId)
     if (plantId != -1) {
 
-      var contraindicationListString = (selectedPlantContraindicationList.join(','))
-      var constituentListString = (selectedPlantConstituentList.join(','))
-      var effectListString = (selectedPlantEffectList.join(','))
-      var negativeEffectListString = (selectedPlantNegativeEffectList.join(','))
-      var indicationListString = (selectedPlantIndicationList.join(','))
+      var contraindicationListString = (selectedPlantContraindicationList?.join(',')) ?? ""
+      var constituentListString = (selectedPlantConstituentList?.join(',')) ?? ""
+      var effectListString = (selectedPlantEffectList?.join(',')) ?? ""
+      var negativeEffectListString = (selectedPlantNegativeEffectList?.join(',')) ?? ""
+      var indicationListString = (selectedPlantIndicationList?.join(',')) ?? ""
 
-      console.log(values)
 
       const queryParams = new URLSearchParams();
       queryParams.append("plantId", plantId);
@@ -109,11 +127,11 @@ const FormPlant = (props) => {
     setPlantNegativeEffect(null)
     setPlantIndication(null)
 
-    setSelectedPlantConstituentList(null)
-    setSelectedPlantContraindicationList(null)
-    setSelectedPlantEffectList(null)
-    setSelectedPlantNegativeEffectList(null)
-    setSelectedPlantIndicationList(null)
+    setSelectedPlantConstituentList([])
+    setSelectedPlantContraindicationList([])
+    setSelectedPlantEffectList([])
+    setSelectedPlantNegativeEffectList([])
+    setSelectedPlantIndicationList([])
   };
 
 
