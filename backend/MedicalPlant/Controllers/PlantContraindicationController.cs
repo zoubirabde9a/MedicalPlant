@@ -1,6 +1,7 @@
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Model;
 namespace Controllers;
 
@@ -86,7 +87,7 @@ public class PlantContraindicationController : Controller
     
     [HttpGet]
     [Route("GetAllByLatinName")]
-    public async Task<ActionResult<List<PlantDivision>>> GetAllByLatinName(int offset, int limit, string latinNameLike)
+    public async Task<ActionResult<List<PlantContraindication>>> GetAllByLatinName(int offset, int limit, string latinNameLike)
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
@@ -98,5 +99,95 @@ public class PlantContraindicationController : Controller
                 .Where(plant => !plant.Removed && plant.LatinName.ToLower().Contains(latinNameLike.ToLower())).Skip(offset).Take(limit)
                 .ToListAsync());
         }
+    }
+
+    
+    [HttpGet]
+    [Route("GetByPlantId")]
+    public async Task<ActionResult<List<PlantContraindication>>> GetByPlantId(int offset, int limit, int plantId)
+    {
+        var entryList = await Context.PlantContraindicationEntryData.Where(entry => plantId == entry.PlantId).Skip(offset).Take(limit)
+            .ToListAsync();
+                
+        ServiceProvider serviceProvider = new ServiceCollection()
+            .AddLogging((loggingBuilder) => loggingBuilder
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddConsole()
+            )
+            .BuildServiceProvider();
+
+        var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
+
+        for (int i = 0; i < 1000; i++)
+        {
+            logger.LogCritical( "plantId = " + plantId + "  critical " + entryList.Count);
+        }
+
+        return Ok(entryList);
+    }
+
+
+    [HttpPost]
+    [Route("AddEntry")]
+    public async Task<ActionResult<PlantContraindication>> AddContraindicationEntry(int plantId, int contraindicationId)
+    {
+        var entryList = Context.PlantContraindicationEntryData.Where(entry =>
+            entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
+
+        var plantList = Context.PlantData.Where(plant => plant.PlantId == plantId);
+        var contraindicationList =
+            Context.PlantContraindicationData.Where(contraindication => contraindication.PlantContraindicationId == contraindicationId);
+
+        bool alreadyExists = entryList != null && entryList.Count() > 0;
+        bool PlantDoesNotExist = plantList == null || plantList.Count() == 0;
+        bool contraindicationDoesNotExist = contraindicationList == null || contraindicationList.Count() == 0;
+
+        if (alreadyExists)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Entry already exists!" });
+        }
+
+        if (PlantDoesNotExist)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Plant does not exist!" });
+        }
+
+        if (contraindicationDoesNotExist)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Contraindication does not exist!" });
+        }
+
+        var newObject = Context.PlantContraindicationEntryData.Add(new PlantContraindicationEntry
+        {
+            PlantId = plantId,
+            PlantContraindicationId = contraindicationId
+        }).Entity;
+
+        await Context.SaveChangesAsync();
+        return Ok(Json(newObject).Value);
+    }
+    
+    [HttpPost]
+    [Route("RemoveContraindicationEntry")]
+    public async Task<ActionResult<PlantContraindication>> RemoveContraindicationEntry(int plantId, int contraindicationId)
+    {
+        var entryList = Context.PlantContraindicationEntryData.Where(entry =>
+            entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
+        
+        bool alreadyExists = entryList != null && entryList.Count() > 0;
+        
+        if (!alreadyExists)
+        {
+            HttpContext.Response.StatusCode = 500;
+            return new JsonResult(new { error = "Entry does not exists!" });
+        }
+        
+        Context.PlantContraindicationEntryData.Remove(entryList.ToList()[0]);
+
+        await Context.SaveChangesAsync();
+        return Ok();
     }
 }
