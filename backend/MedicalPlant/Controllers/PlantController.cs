@@ -100,8 +100,58 @@ public class PlantController : Controller
     [HttpPost]
     [Route("Update")]
     public async Task<ActionResult<Plant>> Update(long plantId, string latinName, string commonName, string arabicName, long plantOriginId, long plantDivisionId, long plantVegetableReignId,
-        long plantClassId, long plantFamilyId, long plantGenreId, long plantSpeciesId ,long plantPartId)
+        long plantClassId, long plantFamilyId, long plantGenreId, long plantSpeciesId ,long plantPartId, 
+        string plantContraindicationList, string plantConstituentList,
+        string plantEffectList, string plantNegativeEffectList, string plantIndicationList)
     {
+
+        List<int> plantContraindicationIds = new List<int>();
+        List<int> plantConstituentsIds = new List<int>();
+        List<int> plantEffectsIds = new List<int>();
+        List<int> plantNegativeEffectsIds = new List<int>();
+        List<int> plantIndicationsIds = new List<int>();
+        
+        if (!string.IsNullOrEmpty(plantContraindicationList))
+        {
+            // Decode the encoded values
+            string decodedIdList = Uri.UnescapeDataString(plantContraindicationList);
+
+            plantContraindicationIds = decodedIdList.Split(',').Select(int.Parse).ToList();
+        }
+        
+        if (!string.IsNullOrEmpty(plantConstituentList))
+        {
+            // Decode the encoded values
+            string decodedIdList = Uri.UnescapeDataString(plantConstituentList);
+
+            plantConstituentsIds = decodedIdList.Split(',').Select(int.Parse).ToList();
+        }
+        
+        if (!string.IsNullOrEmpty(plantEffectList))
+        {
+            // Decode the encoded values
+            string decodedIdList = Uri.UnescapeDataString(plantEffectList);
+
+            plantEffectsIds = decodedIdList.Split(',').Select(int.Parse).ToList();
+        }
+        
+        if (!string.IsNullOrEmpty(plantNegativeEffectList))
+        {
+            // Decode the encoded values
+            string decodedIdList = Uri.UnescapeDataString(plantNegativeEffectList);
+
+            plantNegativeEffectsIds = decodedIdList.Split(',').Select(int.Parse).ToList();
+        }
+        
+        if (!string.IsNullOrEmpty(plantIndicationList))
+        {
+            // Decode the encoded values
+            string decodedIdList = Uri.UnescapeDataString(plantIndicationList);
+
+            plantIndicationsIds = decodedIdList.Split(',').Select(int.Parse).ToList();
+        }
+
+
         if (latinName == null)
         {
             new JsonResult(new { error = "Latin name cant be null" });  
@@ -118,62 +168,42 @@ public class PlantController : Controller
         }
         
         var plant = Context.PlantData.Find(plantId);
-        var division = Context.PlantDivisionData.Find(plantDivisionId);
-        var plantOrigin = Context.PlantOriginData.Find(plantOriginId);
-        var vegetableReign = Context.VegetableReignData.Find(plantVegetableReignId);
-        
-        
-        var plantClass = Context.PlantClassData.Find(plantClassId);
-        var plantFamily = Context.PlantFamilyData.Find(plantFamilyId);
-        var plantGenre = Context.PlantGenreData.Find(plantGenreId);
-        var plantSpecies = Context.PlantSpeciesData.Find(plantSpeciesId);
-        var plantPart = Context.PlantPartData.Find(plantPartId);
 
         if (plant == null)
         {
             return new JsonResult(new { error = "Cannot be found!" });  
         }
-        
-        /*if (plantOrigin == null)
+
+
+        var contraindicationList = Context.PlantContraindicationEntryData.Where(entry => entry.PlantId == plantId);
+        foreach (var element in contraindicationList)
         {
-            return new JsonResult(new { error = "Origin  cannot be found!" });  
+            Context.PlantContraindicationEntryData.Remove(element);
         }
         
-        if (division == null)
+        var constituentList = Context.PlantConstituentEntryData.Where(entry => entry.PlantId == plantId);
+        foreach (var element in constituentList)
         {
-            return new JsonResult(new { error = "DivisionId cannot be found!" });  
+            Context.PlantConstituentEntryData.Remove(element);
         }
         
-        if (vegetableReign == null)
+        var effectList = Context.PlantEffectEntryData.Where(entry => entry.PlantId == plantId);
+        foreach (var element in effectList)
         {
-            return new JsonResult(new { error = "VegetableReign cannot be found!" });  
+            Context.PlantEffectEntryData.Remove(element);
         }
         
-        
-        if (plantClass == null)
+        var negativeEffectList = Context.PlantNegativeEffectEntryData.Where(entry => entry.PlantId == plantId);
+        foreach (var element in negativeEffectList)
         {
-            return new JsonResult(new { error = "plantClass cannot be found!" });  
+            Context.PlantNegativeEffectEntryData.Remove(element);
         }
         
-        if (plantFamily == null)
+        var indicationList = Context.PlantIndicationEntryData.Where(entry => entry.PlantId == plantId);
+        foreach (var element in indicationList)
         {
-            return new JsonResult(new { error = "plantFamily cannot be found!" });  
+            Context.PlantIndicationEntryData.Remove(element);
         }
-        
-        if (plantGenre == null)
-        {
-            return new JsonResult(new { error = "plantGenre cannot be found!" });  
-        }
-        
-        if (plantSpecies == null)
-        {
-            return new JsonResult(new { error = "plantSpecies cannot be found!" });  
-        }
-        
-        if (plantPart == null)
-        {
-            return new JsonResult(new { error = "plantPart cannot be found!" });  
-        }*/
 
         plant.LatinName = latinName;
         plant.CommonName = commonName;
@@ -187,7 +217,59 @@ public class PlantController : Controller
         plant.PlantFamilyId = plantFamilyId; 
         plant.PlantGenreId = plantGenreId; 
         plant.PlantSpeciesId = plantSpeciesId; 
-        plant.UsedPartId = plantPartId; 
+        plant.UsedPartId = plantPartId;
+
+        foreach (var contraindicationId in plantContraindicationIds)
+        {
+            PlantContraindicationEntry entry = new PlantContraindicationEntry
+            {
+                PlantId = plantId,
+                PlantContraindicationId = contraindicationId
+            };
+            Context.PlantContraindicationEntryData.Add(entry);
+        }
+
+        
+        foreach (var id in plantConstituentsIds)
+        {
+            PlantConstituentEntry entry = new PlantConstituentEntry
+            {
+                PlantId = plantId,
+                PlantConstituentId = id
+            };
+            Context.PlantConstituentEntryData.Add(entry);
+        }
+
+        foreach (var id in plantEffectsIds)
+        {
+            PlantEffectEntry entry = new PlantEffectEntry
+            {
+                PlantId = plantId,
+                PlantEffectId = id
+            };
+            Context.PlantEffectEntryData.Add(entry);
+        }
+
+        foreach (var id in plantNegativeEffectsIds)
+        {
+            PlantNegativeEffectEntry entry = new PlantNegativeEffectEntry
+            {
+                PlantId = plantId,
+                PlantNegativeEffectId = id
+            };
+            Context.PlantNegativeEffectEntryData.Add(entry);
+        }
+        
+        
+        foreach (var id in plantIndicationsIds)
+        {
+            PlantIndicationEntry entry = new PlantIndicationEntry
+            {
+                PlantId = plantId,
+                PlantIndicationId = id
+            };
+            Context.PlantIndicationEntryData.Add(entry);
+        }
         
         await Context.SaveChangesAsync();
         return Ok(Json(plant).Value);
@@ -207,72 +289,6 @@ public class PlantController : Controller
         }
         
         return new JsonResult(new { error = "Cannot be found!" });   
-    }
-
-    [HttpPost]
-    [Route("AddContraindicationEntry")]
-    public async Task<ActionResult<Plant>> AddContraindicationEntry(int plantId, int contraindicationId)
-    {
-        var entryList = Context.PlantContraindicationEntryData.Where(entry =>
-            entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
-
-        var plantList = Context.PlantData.Where(plant => plant.PlantId == plantId);
-        var contraindicationList =
-            Context.PlantContraindicationData.Where(contraindication => contraindication.PlantContraindicationId == contraindicationId);
-
-        bool alreadyExists = entryList != null && entryList.Count() > 0;
-        bool PlantDoesNotExist = plantList == null || plantList.Count() == 0;
-        bool contraindicationDoesNotExist = contraindicationList == null || contraindicationList.Count() == 0;
-
-        if (alreadyExists)
-        {
-            HttpContext.Response.StatusCode = 500;
-            return new JsonResult(new { error = "Entry already exists!" });
-        }
-
-        if (PlantDoesNotExist)
-        {
-            HttpContext.Response.StatusCode = 500;
-            return new JsonResult(new { error = "Plant does not exist!" });
-        }
-
-        if (contraindicationDoesNotExist)
-        {
-            HttpContext.Response.StatusCode = 500;
-            return new JsonResult(new { error = "Contraindication does not exist!" });
-        }
-
-        var newObject = Context.PlantContraindicationEntryData.Add(new PlantContraindicationEntry
-        {
-            PlantId = plantId,
-            PlantContraindicationId = contraindicationId
-        }).Entity;
-
-        await Context.SaveChangesAsync();
-        return Ok(Json(newObject).Value);
-    }
-    
-    [HttpPost]
-    [Route("RemoveContraindicationEntry")]
-    public async Task<ActionResult<Plant>> RemoveContraindicationEntry(int plantId, int contraindicationId)
-    {
-        var entryList = Context.PlantContraindicationEntryData.Where(entry =>
-            entry.PlantId == plantId && entry.PlantContraindicationId == contraindicationId);
-
-      
-
-        bool alreadyExists = entryList != null && entryList.Count() > 0;
-        
-        if (!alreadyExists)
-        {
-            HttpContext.Response.StatusCode = 500;
-            return new JsonResult(new { error = "Entry does not exists!" });
-        }
-        
-        Context.PlantContraindicationEntryData.Remove(entryList.ToList()[0]);
-
-        await Context.SaveChangesAsync();
-        return Ok();
     }
 
 
@@ -312,7 +328,7 @@ public class PlantController : Controller
     {
         if (string.IsNullOrEmpty(latinNameLike))
         {
-            return Ok(await PlantData.ToList(await Context.PlantData.Skip(offset).Take(limit).OrderBy(plant => plant.PlantId).ToListAsync(), Context));
+            return Ok(await PlantData.ToList(await Context.PlantData.Where(plant => !plant.Removed).Skip(offset).Take(limit).OrderBy(plant => plant.PlantId).ToListAsync(), Context));
         }
         else
         {
