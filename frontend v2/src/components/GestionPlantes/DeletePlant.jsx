@@ -1,5 +1,6 @@
 import { Button, Checkbox, Form, Input, Modal, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
+import BackendServerUrl from "../../Config.jsx";
 
 const DeletePlant = (props) => {
 
@@ -8,7 +9,7 @@ const DeletePlant = (props) => {
         const queryParams = new URLSearchParams();
         queryParams.append("plantId", props?.itemData?.plantId);
 
-        const url = `http://localhost:5202/api/Plant/Remove?${queryParams.toString()}`;
+        const url = BackendServerUrl + `api/Plant/Remove?${queryParams.toString()}`;
         fetch(url, {
             method: "POST",
             headers: {

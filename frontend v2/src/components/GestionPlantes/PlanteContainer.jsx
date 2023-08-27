@@ -5,6 +5,7 @@ import DeletePlant from './DeletePlant';
 import { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import PropertySelector from "./PropertySelector.jsx";
+import BackendServerUrl from "../../Config.jsx";
 
 const PlantContainer = () => {
   const [showModal, setShowModal] = useState(false);
@@ -26,32 +27,32 @@ const PlantContainer = () => {
   const searchFunction = () => {
     const pageOffset = 1;
     const pageSize = 10;
-    var path = `http://localhost:5202/api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+    var path = BackendServerUrl + `api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
     if (filterText) {
       switch ("PlantOrigin") {
         case "PlantOrigin":
-          path = `http://localhost:5202/api/PlantOrigin/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantOrigin/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "VegetableReign":
-          path = `http://localhost:5202/api/VegetableReign/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/VegetableReign/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantDivision":
-          path = `http://localhost:5202/api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantDivision/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantClass":
-          path = `http://localhost:5202/api/PlantClass/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantClass/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantFamily":
-          path = `http://localhost:5202/api/PlantFamily/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantFamily/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantGenre":
-          path = `http://localhost:5202/api/PlantGenre/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantGenre/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantSpecies":
-          path = `http://localhost:5202/api/PlantSpecies/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantSpecies/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
         case "PlantPart":
-          path = `http://localhost:5202/api/PlantPart/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
+          path = BackendServerUrl + `api/PlantPart/GetAllByLatinName?offset=${pageOffset}&limit=${pageSize}&latinNameLike=` + filterText;
           break;
       }
     }
@@ -66,7 +67,7 @@ const PlantContainer = () => {
 
 
   const fetchData = () => {
-    fetch(`http://localhost:5202/api/Plant/GetAllByLatinName?offset=0&limit=99999&latinNameLike=` + filterText)
+    fetch(BackendServerUrl + `api/Plant/GetAllByLatinName?offset=0&limit=99999&latinNameLike=` + filterText)
       .then((response) => response.json())
       .then((data) => {
         setTableData(data);

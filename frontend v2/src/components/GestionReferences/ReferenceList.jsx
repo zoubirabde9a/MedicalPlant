@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import Title from "antd/es/typography/Title";
 import AddReference from "./AddReference";
+import BackendServerUrl from "../../Config.jsx";
 
 const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
@@ -30,7 +31,7 @@ const ReferenceList = (props) => {
   // const [collapsed, setCollapsed] = useState(false);
 
   const loadData = () => {
-    fetch(`http://localhost:5202/api/${props.reference.name}/GetAll?offset=0&limit=9999`)
+    fetch(BackendServerUrl + `api/${props.reference.name}/GetAll?offset=0&limit=9999`)
       .then((response) => response.json())
       .then((data) => {
         setList(data);
@@ -44,7 +45,7 @@ const ReferenceList = (props) => {
     // queryParams.append("latinName", data.latinName);
     console.log("id", data[matchingReference[props.reference.name]]);
     queryParams.append("id", data[matchingReference[props.reference.name]]);
-    const url = `http://localhost:5202/api/${props.reference.name}/Remove?${queryParams.toString()}`;
+    const url = BackendServerUrl + `api/${props.reference.name}/Remove?${queryParams.toString()}`;
 
     fetch(url, {
       method: "POST",
